@@ -1,0 +1,984 @@
+# STIG Benchmark: Apple iOS-iPadOS 16 Security Technical Implementation Guide
+
+---
+
+**Version:** 2
+
+**Description:**
+This Security Technical Implementation Guide is published as a tool to improve the security of Department of Defense (DOD) information systems. The requirements are derived from the National Institute of Standards and Technology (NIST) 800-53 and related documents. Comments or proposed revisions to this document should be sent via email to the following address: disa.stig_spt@mail.mil.
+
+## Group: PP-MDF-321090
+
+**Group ID:** `V-254578`
+
+### Rule: Apple iOS/iPadOS 16 must allow the Administrator (MDM) to perform the following management function: enable/disable VPN protection across the device and [selection: other methods].
+
+**Rule ID:** `SV-254578r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>The system administrator must have the capability to configure VPN access to meet organization-specific policies based on mission needs. Otherwise, a user could inadvertently or maliciously set up a VPN and connect to a network that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_SMF_EXT.1.1 #3</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review the list of unmanaged apps installed on the iPhone and iPad and determine if any third-party VPN clients are installed. If so, verify the VPN app is not configured with a DoD network (work) VPN profile. This validation procedure is performed on the iOS device only. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap the "VPN and Device Management" line and determine if any "Personal VPN" exists. 4. If not, the requirement has been met. 5. If there are personal VPNs, open each VPN app. Review the list of VPN profiles configured on the VPN client. 6. Verify no DoD network VPN profiles are configured on the VPN client. If any third-party unmanaged VPN apps are installed (personal VPN) and they have a DoD network VPN profile configured on the client, this is a finding. Note: This setting cannot be managed by the MDM administrator and is a User-Based Enforcement (UBE) requirement.
+
+## Group: PP-MDF-321280
+
+**Group ID:** `V-254579`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (iCloud).
+
+**Rule ID:** `SV-254579r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement is not applicable if the authorizing official (AO) has approved users' full access to the Apple App Store for downloading unmanaged (personal) apps and syncing personal data on the device with personal cloud data storage accounts. The site must have an AO-signed document showing the AO has assumed the risk for users' full access to the Apple App Store. Review configuration settings to confirm iCloud Backup is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow iCloud backup" is unchecked. Alternatively, verify the text "<key>allowCloudBackup</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the policy. 5. Tap "Restrictions". 6. Verify "iCloud backup not allowed". If "Allow iCloud backup" is checked in the Apple iOS/iPadOS management tool, "<key>allowCloudBackup</key><true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "iCloud backup not allowed", this is a finding.
+
+## Group: PP-MDF-321290
+
+**Group ID:** `V-254580`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (iCloud document and data synchronization).
+
+**Rule ID:** `SV-254580r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement is not applicable if the authorizing official (AO) has approved users' full access to the Apple App Store for downloading unmanaged (personal) apps and syncing personal data on the device with personal cloud data storage accounts. The site must have an AO-signed document showing the AO has assumed the risk for users' full access to the Apple App Store. Review configuration settings to confirm "Allow iCloud documents & data" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow iCloud documents & data" is unchecked. Alternatively, verify the text "<key>allowCloudDocumentSync</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the policy. 5. Tap "Restrictions". 6. Verify "Documents in the Cloud not allowed". Note: This also verifies that iCloud Drive and iCloud Photo Library is disabled. If "Allow iCloud documents & data" is checked in the Apple iOS/iPadOS management tool, "<key>allowCloudDocumentSync</key> <true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Documents in the Cloud not allowed", this is a finding.
+
+## Group: PP-MDF-321290
+
+**Group ID:** `V-254581`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (iCloud Keychain).
+
+**Rule ID:** `SV-254581r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement is not applicable if the authorizing official (AO) has approved users' full access to the Apple App Store for downloading unmanaged (personal) apps and syncing personal data on the device with personal cloud data storage accounts. The site must have an AO-signed document showing the AO has assumed the risk for users' full access to the Apple App Store. Review configuration settings to confirm iCloud keychain is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow iCloud keychain" is unchecked. Alternatively, verify the text "<key>allowCloudKeychainSync</key><false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Verify "iCloud Keychain not allowed" is listed. If "Allow iCloud keychain" is checked in the Apple iOS/iPadOS management tool, "<key>allowCloudKeychainSync</key><true/>" appears in the configuration profile, or "iCloud Keychain not allowed" is not listed on the iPhone and iPad, this is a finding.
+
+## Group: PP-MDF-321290
+
+**Group ID:** `V-254582`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (My Photo Stream).
+
+**Rule ID:** `SV-254582r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement is not applicable if the authorizing official (AO) has approved users' full access to the Apple App Store for downloading unmanaged (personal) apps and syncing personal data on the device with personal cloud data storage accounts. The site must have an AO-signed document showing the AO has assumed the risk for users' full access to the Apple App Store. Review configuration settings to confirm "Allow My Photo Stream" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow My Photo Stream" is unchecked. Alternatively, verify the text "<key>allowPhotoStream</key><false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Photo Stream not allowed" is listed. If "Allow Photo Stream" is checked in the Apple iOS/iPadOS management tool, "<key>allowPhotoStream</key> <true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Photo Stream not allowed", this is a finding.
+
+## Group: PP-MDF-321290
+
+**Group ID:** `V-254583`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (iCloud Photo Sharing, also known as Shared Photo Streams).
+
+**Rule ID:** `SV-254583r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement is not applicable if the authorizing official (AO) has approved users' full access to the Apple App Store for downloading unmanaged (personal) apps and syncing personal data on the device with personal cloud data storage accounts. The site must have an AO-signed document showing the AO has assumed the risk for users' full access to the Apple App Store. Review configuration settings to confirm "Allow iCloud Photos" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow iCloud Photos" is unchecked. Alternatively, verify the text "<key>allowSharedStream</key><false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Shared streams not allowed" is listed. If "Allow iCloud Photos" is checked in the Apple iOS/iPadOS management tool, "<key>allowSharedStream</key><true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Shared streams not allowed", this is a finding.
+
+## Group: PP-MDF-321290
+
+**Group ID:** `V-254584`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (managed applications data stored in iCloud).
+
+**Rule ID:** `SV-254584r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow managed apps to store data in iCloud" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow managed apps to store data in iCloud" is unchecked. Alternatively, verify the text "<key>allowManagedAppsCloudSync</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Managed apps cloud sync not allowed" is listed. If "Allow managed apps to store data in iCloud" is checked in the Apple iOS/iPadOS management tool, "<key>allowManagedAppsCloudSync</key> <true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Managed apps cloud sync not allowed", this is a finding.
+
+## Group: PP-MDF-321290
+
+**Group ID:** `V-254585`
+
+### Rule: Apple iOS/iPadOS 16 must not allow backup to remote systems (enterprise books).
+
+**Rule ID:** `SV-254585r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_MOF_EXT.1.2 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow backup of enterprise books" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow backup of enterprise books" is unchecked. Alternatively, verify the text "<key>allowEnterpriseBookBackup</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Backing up enterprise books not allowed" is listed. If "Allow backup of enterprise books" is checked in the Apple iOS/iPadOS management tool, "<key>allowEnterpriseBookBackup</key> <true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Backing up enterprise books not allowed", this is a finding.
+
+## Group: PP-MDF-321400
+
+**Group ID:** `V-254586`
+
+### Rule: Apple iOS/iPadOS 16 must [selection: wipe protected data, wipe sensitive data] upon unenrollment from MDM.
+
+**Rule ID:** `SV-254586r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>When a mobile device is no longer going to be managed by MDM technologies, its protected/sensitive data must be sanitized because it will no longer be protected by the MDM software, putting it at much greater risk of unauthorized access and disclosure. At least one of the two options must be selected. SFR ID: FMT_SMF_EXT.2.1</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: Not all Apple iOS/iPadOS deployments involve MDM. If the site uses an authorized alternative to MDM for distribution of configuration profiles (Apple Configurator), this check procedure is not applicable. This check procedure is performed on the Apple iOS/iPadOS management tool or on the iOS device. In the Apple iOS/iPadOS management tool, for each managed app, verify the app is configured to be removed when the MDM profile is removed. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Apps". 6. Tap an app and verify "App and data will be removed when device is no longer managed" is listed. Repeat steps 5 and 6 for each managed app in the list. If one or more managed apps are not set to be removed upon device MDM unenrollment, this is a finding.
+
+## Group: PP-MDF-321410
+
+**Group ID:** `V-254587`
+
+### Rule: Apple iOS/iPadOS 16 must [selection: remove Enterprise application, remove all noncore applications (any nonfactory-installed application)] upon unenrollment from MDM.
+
+**Rule ID:** `SV-254587r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>When a mobile device is no longer going to be managed by MDM technologies, its protected/sensitive data must be sanitized because it will no longer be protected by the MDM software, putting it at much greater risk of unauthorized access and disclosure. At least one of the two options must be selected. SFR ID: FMT_SMF_EXT.2.1</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: Not all Apple iOS/iPadOS deployments involve MDM. If the site uses an authorized alternative to MDM for distribution of configuration profiles (Apple Configurator), this check procedure is not applicable. This check procedure is performed on the Apple iOS/iPadOS management tool or on the iOS device. In the Apple iOS/iPadOS management tool, for each managed app, verify the app is configured to be removed when the MDM profile is removed. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Apps". 6. Tap an app and verify "App and data will be removed when device is no longer managed" is listed. Repeat steps 5 and 6 for each managed app in the list. If one or more managed apps are not set to be removed upon device MDM unenrollment, this is a finding.
+
+## Group: PP-MDF-323024
+
+**Group ID:** `V-254588`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to enforce a minimum password length of six characters.
+
+**Rule ID:** `SV-254588r1015678_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Password strength is a measure of the effectiveness of a password in resisting guessing and brute force attacks. The ability to crack a password is a function of how many attempts an adversary is permitted, how quickly an adversary can do each attempt, and the size of the password space. The longer the minimum length of the password is, the larger the password space. Having a too-short minimum password length significantly reduces password strength, increasing the chance of password compromise and resulting device and data compromise. SFR ID: FMT_SMF_EXT.1.1 #1a</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm the minimum passcode length is six or more characters. This procedure is performed in the Apple iOS/iPadOS management tool and on the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Management tool, verify the "Minimum passcode length" value is set to six or greater. Alternatively, verify the text "<key>minLength</key> <integer>6</integer>" appears in the configuration profile (.mobileconfig file). It also is acceptable for the integer value to be greater than six. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the password policy. 5. Tap "Restrictions". 6. Tap "Passcode". 7. Verify "Minimum length" is listed as "six or greater". If the "Minimum passcode length" is less than six characters in the iOS management tool, "<key>minLength</key> " has an integer value of less than six, or the password policy on the iPhone and iPad from the Apple iOS/iPadOS management tool does not list "Minimum length" of six or fewer, this is a finding.
+
+## Group: PP-MDF-323025
+
+**Group ID:** `V-254589`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to not allow passwords that include more than four repeating or sequential characters.
+
+**Rule ID:** `SV-254589r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Password strength is a measure of the effectiveness of a password in resisting guessing and brute force attacks. Passwords that contain repeating or sequential characters are significantly easier to guess than those that do not contain repeating or sequential characters. Therefore, disallowing repeating or sequential characters increases password strength and decreases risk. SFR ID: FMT_SMF_EXT.1.1 #1b</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm simple passcodes are not allowed. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow simple value" is unchecked. Alternatively, verify the text "<key>allowSimple</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the password policy. 5. Tap "Restrictions". 6. Tap "Passcode". 7. Verify "Simple passcodes allowed" is set to "No". If "Allow simple value" is checked in the Apple iOS/iPadOS management tool, "<key>allowSimple</key> <true/>" appears in the Configuration Profile, or the password policy on the iPhone and iPad does not have "Simple passcodes allowed" set to "No", this is a finding.
+
+## Group: PP-MDF-323026
+
+**Group ID:** `V-254590`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to enable a screen-lock policy that will lock the display after a period of inactivity.
+
+**Rule ID:** `SV-254590r958402_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The screen-lock timeout helps protect the device from unauthorized access. Devices without a screen-lock timeout provide an opportunity for adversaries who gain physical access to the mobile device through loss, theft, etc. Such devices are much more likely to be in an unlocked state when acquired by an adversary, thus granting immediate access to the data on the mobile device and possibly access to DoD networks. SFR ID: FMT_SMF_EXT.1.1 #2a</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm the screen lock timeout is set to 15 minutes or less. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the management tool, verify the sum of the values assigned to "Maximum Auto-Lock time" and "Grace period for device lock" is between 1 and 15 minutes. Alternatively, locate the text "<key>maxGracePeriod</key>" and "<key>maxInactivity</key>" and ensure the sum of their integer value is between 1 and 15 in the configuration profile (.mobileconfig file). For example: "<key>maxGracePeriod</key> <integer>5</integer> <key>maxInactivity</key> <integer>5</integer>" Here, 5 + 5 = 10; this meets the requirement. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the password policy. 5. Tap "Restrictions". 6. Tap "Passcode". 7. Verify the sum of the "Max grace period" and "Max inactivity" values is less than 15 minutes. Note: On some iOS/iPadOS devices, it is not possible to have a sum of exactly 15. In these cases, the sum must be less than 15. A sum of 16 does not meet the requirement. On the management server, if the sum of the "Max grace period" and "Max inactivity" values is not between 1 and 15 minutes in the iOS/iPadOS management tool or the sum of the values assigned to "<key>maxGracePeriod</key>" and "<key>maxInactivity</key>" is not between 1 and 15 minutes in the configuration profile, or if on the iPhone/iPad, the sum of the values assigned to "Max grace period" and "Max inactivity" is not between 1 and 15 minutes, this is a finding.
+
+## Group: PP-MDF-323030
+
+**Group ID:** `V-254591`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to lock the display after 15 minutes (or less) of inactivity.
+
+**Rule ID:** `SV-254591r958402_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The screen lock timeout must be set to a value that helps protect the device from unauthorized access. Having a too-long timeout would increase the window of opportunity for adversaries who gain physical access to the mobile device through loss, theft, etc. Such devices are much more likely to be in an unlocked state when acquired by an adversary, thus granting immediate access to the data on the mobile device. The maximum timeout period of 15 minutes has been selected to balance functionality and security; shorter timeout periods may be appropriate depending on the risks posed to the mobile device. SFR ID: FMT_SMF_EXT.1.1 #2b</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm the screen lock timeout is set to 15 minutes or less. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the management tool, verify the sum of the values assigned to "Maximum Auto-Lock time" and "Grace period for device lock" is between 1 and 15 minutes. Alternatively, locate the text "<key>maxGracePeriod</key>" and "<key>maxInactivity</key>" and ensure the sum of their integer value is between 1 and 15 in the configuration profile (.mobileconfig file). For example: "<key>maxGracePeriod</key> <integer>5</integer> <key>maxInactivity</key> <integer>5</integer>" Here, 5 + 5 = 10; this meets the requirement. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the password policy. 5. Tap "Restrictions". 6. Tap "Passcode". 7. Verify the sum of the "Max grace period" and "Max inactivity" values is less than 15 minutes. Note: On some iOS/iPadOS devices, it is not possible to have a sum of exactly 15. In these cases, the sum must be less than 15. A sum of 16 does not meet the requirement. On the management server, if the sum of the "Max grace period" and "Max inactivity" values is not between 1 and 15 minutes in the iOS/iPadOS management tool or the sum of the values assigned to "<key>maxGracePeriod</key>" and "<key>maxInactivity</key>" is not between 1 and 15 minutes in the configuration profile, or if on the iPhone/iPad, the sum of the values assigned to "Max grace period" and "Max inactivity" is not between 1 and 15 minutes, this is a finding.
+
+## Group: PP-MDF-323040
+
+**Group ID:** `V-254592`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to not allow more than 10 consecutive failed authentication attempts.
+
+**Rule ID:** `SV-254592r958388_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The more attempts an adversary has to guess a password, the more likely the adversary will enter the correct password and gain access to resources on the device. Setting a limit on the number of attempts mitigates this risk. Setting the limit at 10 or less gives authorized users the ability to make a few mistakes when entering the password but still provides adequate protection against dictionary or brute force attacks on the password. SFR ID: FMT_SMF_EXT.1.1 #2c, FIA_AFL_EXT.1.5</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm that consecutive failed authentication attempts is set to 10 or fewer. This procedure is performed in the Apple iOS/iPadOS management tool and on the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Management tool, verify the "Maximum number of failed attempts" value is set to 10 or fewer. Alternatively, verify the text "<key>maxFailedAttempts</key> <integer>10</integer>" appears in the configuration profile (.mobileconfig file). It also is acceptable for the integer value to be less than 10. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the password policy. 5. Tap "Restrictions". 6. Tap "Passcode". 7. Verify "Max failed attempts" is listed as "10" or fewer. If the "Maximum number of failed attempts" is more than 10 in the iOS management tool, "<key>maxFailedAttempts</key> " has an integer value of more than 10, or the password policy on the iPhone and iPad does not list "Max failed attempts" of 10 or fewer, this is a finding.
+
+## Group: PP-MDF-323050
+
+**Group ID:** `V-254593`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to enforce an application installation policy by specifying one or more authorized application repositories, including [selection: DoD-approved commercial app repository, MDM server, mobile application store].
+
+**Rule ID:** `SV-254593r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Forcing all applications to be installed from authorized application repositories can prevent unauthorized and malicious applications from being installed and executed on mobile devices. Allowing such installations and executions could cause a compromise of DoD data accessible by these unauthorized/malicious applications. SFR ID: FMT_SMF_EXT.1.1 #8a</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow Trusting New Enterprise App Authors" is disabled. This procedure is performed in the Apple iOS/iPadOS management tool and on the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Management tool, verify "Allow Trusting New Enterprise App Authors" is disabled. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Trusting enterprise apps not allowed" is listed. If "Allow Trusting New Enterprise App Authors" is not disabled in the iOS/iPadOS management tool or on the iPhone and iPad, this is a finding.
+
+## Group: PP-MDF-323070
+
+**Group ID:** `V-254594`
+
+### Rule: Apple iOS/iPadOS 16 must not include applications with the following characteristics: access to Siri when the device is locked.
+
+**Rule ID:** `SV-254594r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Requiring all authorized applications to be in an application allow list prevents the execution of any applications (e.g., unauthorized, malicious) that are not part of the allow list. Failure to configure an application allow list properly could allow unauthorized and malicious applications to be downloaded, installed, and executed on the mobile device, causing a compromise of DoD data accessible by these applications. Applications with the listed characteristics have features that can cause the compromise of sensitive DoD data or have features with no known application in the DoD environment. Application note: The application allow list, in addition to controlling the installation of applications on the MD, must control user access/execution of all core and preinstalled applications, or the MD must provide an alternate method of restricting user access/execution to core and preinstalled applications. Core application: Any application integrated into the OS by the OS or MD vendors. Preinstalled application: Additional noncore applications included in the OS build by the OS vendor, MD vendor, or wireless carrier. SFR ID: FMT_SMF_EXT.1.1 #8b</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm that Siri is disabled on the Lock screen. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow Siri while device is locked" is unchecked. Alternatively, verify the text "<key>allowAssistantWhileLocked</key><false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Siri while locked not allowed" is listed. If "Allow Siri while device is locked" is checked in the Apple iOS/iPadOS management tool, or "<key>allowAssistantWhileLocked</key><true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad from the Apple iOS/iPadOS management tool does not list "Siri while locked not allowed", this is a finding.
+
+## Group: PP-MDF-323070
+
+**Group ID:** `V-254595`
+
+### Rule: Apple iOS/iPadOS 16 allow list must be configured to not include applications with the following characteristics: allow voice dialing when MD is locked.
+
+**Rule ID:** `SV-254595r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Requiring all authorized applications to be in an application allow list prevents the execution of any applications (e.g., unauthorized, malicious) that are not part of the allow list. Failure to configure an application allow list properly could allow unauthorized and malicious applications to be downloaded, installed, and executed on the mobile device, causing a compromise of DoD data accessible by these applications. Applications with the listed characteristics have features that can cause the compromise of sensitive DoD data or have features with no known application in the DoD environment. Application note: The application allow list, in addition to controlling the installation of applications on the MD, must control user access/execution of all core and preinstalled applications, or the MD must provide an alternate method of restricting user access/execution to core and preinstalled applications. Core application: Any application integrated into the OS by the OS or MD vendors. Preinstalled application: Additional noncore applications included in the OS build by the OS vendor, MD vendor, or wireless carrier. SFR ID: FMT_SMF_EXT.1.1 #8b</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm that "Allow Voice Dialing when locked" is disabled on the lock screen. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow voice dialing while device locked" is unchecked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Voice dialing while locked not allowed" is listed. If "Allow voice dialing when locked not allowed" is checked in the Apple iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad does not list "Voice dialing while locked not allowed", this is a finding.
+
+## Group: PP-MDF-323070
+
+**Group ID:** `V-254596`
+
+### Rule: Apple iOS/iPadOS 16 allowlist must be configured to not include applications with the following characteristics: - Backs up MD data to non-DoD cloud servers (including user and application access to cloud backup services); - Transmits MD diagnostic data to non-DoD servers; - Allows synchronization of data or applications between devices associated with user; and - Allows unencrypted (or encrypted but not FIPS 140-2/FIPS 140-3 validated) data sharing with other MDs or printers.
+
+**Rule ID:** `SV-254596r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Requiring all authorized applications to be in an application allow list prevents the execution of any applications (e.g., unauthorized, malicious) that are not part of the allow list. Failure to configure an application allow list properly could allow unauthorized and malicious applications to be downloaded, installed, and executed on the mobile device, causing a compromise of DoD data accessible by these applications. Applications with the listed characteristics have features that can cause the compromise of sensitive DoD data or have features with no known application in the DoD environment. Application note: The application allow list, in addition to controlling the installation of applications on the MD, must control user access/execution of all core and preinstalled applications, or the MD must provide an alternate method of restricting user access/execution to core and preinstalled applications. Core application: Any application integrated into the OS by the OS or MD vendors. Preinstalled application: Additional noncore applications included in the OS build by the OS vendor, MD vendor, or wireless carrier. SFR ID: FMT_SMF_EXT.1.1 #8b</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify no apps with the following prohibited characteristics are included in the configuration profile: - backs up MD data to non-DoD cloud servers (including user and application access to cloud backup services); - transmits MD diagnostic data to non-DoD servers; - allows synchronization of data or applications between devices associated with user; and - allows unencrypted (or encrypted but not FIPS 140-2/FIPS 140-3 validated) data sharing with other MDs or printers. This check procedure is performed on the Apple iOS/iPadOS management tool. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow Listed App" (allowlistedAppBundelIDs) is configured and there are no apps with prohibited characteristics. If "Allow listed apps" is not configured and contains apps with prohibited characteristics, this is a finding.
+
+## Group: PP-MDF-323080
+
+**Group ID:** `V-254597`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to not display notifications when the device is locked.
+
+**Rule ID:** `SV-254597r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Many mobile devices display notifications on the lock screen so users can obtain relevant information in a timely manner without having to frequently unlock the phone to determine if there are new notifications. However, in many cases, these notifications can contain sensitive information. When they are available on the lock screen, an adversary can see them merely by being in close physical proximity to the device. Configuring the MOS to not send notifications to the lock screen mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #18</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Show Notification Center in Lock screen" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Show Notification Center in Lock screen" is unchecked. Alternatively, verify the text "<key>allowLockScreenNotificationsView</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Restrictions". 6. Verify "Notifications view on lock screen not allowed" is present. If "Show Notification Center in Lock screen" is checked in the Apple iOS/iPadOS management tool, "<key>allowLockScreenNotificationsView</key> <true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Notifications View on lock screen not allowed", this is a finding.
+
+## Group: PP-MDF-323080
+
+**Group ID:** `V-254598`
+
+### Rule: Apple iOS/iPadOS 16 must not display notifications (calendar information) when the device is locked.
+
+**Rule ID:** `SV-254598r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Many mobile devices display notifications on the lock screen so users can obtain relevant information in a timely manner without having to frequently unlock the phone to determine if there are new notifications. However, in many cases, these notifications can contain sensitive information. When they are available on the lock screen, an adversary can see them merely by being in close physical proximity to the device. Configuring the MOS to not send notifications to the lock screen mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #18</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Show Today view in Lock screen" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Show Today view in Lock screen" is unchecked. Alternatively, verify the text "<key>allowLockScreenTodayView</key><false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Restrictions". 6. Verify "Today view on lock screen not allowed" is present. If "Show Today view in Lock screen" is checked in the Apple iOS/iPadOS management tool, "<key>allowLockScreenTodayView</key><true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Today view on lock screen not allowed", this is a finding.
+
+## Group: PP-MDF-323160
+
+**Group ID:** `V-254599`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to display the DoD advisory warning message at startup or each time the user unlocks the device.
+
+**Rule ID:** `SV-254599r958390_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Before granting access to the system, the mobile operating system is required to display the DoD-approved system use notification message or banner that provides privacy and security notices consistent with applicable federal laws, Executive Orders, directives, policies, regulations, standards, and guidance. Required banners help ensure that DoD can audit and monitor the activities of mobile device users without legal restriction. System use notification messages can be displayed when individuals first access or unlock the mobile device. The banner must be implemented as a "click-through" banner at device unlock (to the extent permitted by the operating system). A "click-through" banner prevents further activity on the information system unless and until the user executes a positive action to manifest agreement by clicking on a box indicating "OK". The approved DoD text must be used exactly as required in the Knowledge Service referenced in DoDI 8500.01. For devices accommodating banners of 1300 characters, the banner text is: You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only. By using this IS (which includes any device attached to this IS), you consent to the following conditions: -The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations. -At any time, the USG may inspect and seize data stored on this IS. -Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose. -This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy. -Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details. For devices with severe character limitations, the banner text is: I've read & consent to terms in IS user agreem't. The administrator must configure the banner text exactly as written without any changes. SFR ID: FMT_SMF_EXT.1.1 #36</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+The DoD warning banner can be displayed by either of the following methods (required text is found in the Vulnerability Discussion): 1. By placing the DoD warning banner text in the user agreement signed by each iPhone and iPad user (preferred method). 2. By creating a background picture with the relevant information and configuring that picture as the background for the lock screen via the Apple iOS/iPadOS management tool (only available for supervised devices). Determine which method is used at the iOS device site and follow the appropriate validation procedure below. Validation Procedure for Method #1: Review the signed user agreements for several iOS device users and verify the agreement includes the required DoD warning banner text. Validation Procedure for Method #2: - In the Apple iOS/iPadOS management tool, verify a picture of the DoD warning banner text has been configured as the background for the lock screen. - On the iOS device, verify a picture of the DoD warning banner text is shown as the background for the locked screen. If, for Method #1, the required warning banner text is not on all signed user agreements reviewed, or for Method #2, the DoD warning banner text is not set as the locked screen background, this is a finding.
+
+## Group: PP-MDF-323240
+
+**Group ID:** `V-254600`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to not allow backup of [all applications, configuration data] to locally connected systems.
+
+**Rule ID:** `SV-254600r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Data on mobile devices is protected by numerous mechanisms, including user authentication, access control, and cryptography. When the data is backed up to an external system (either locally connected or cloud based), many if not all of these mechanisms are no longer present. This leaves the backed-up data vulnerable to attack. Disabling backup to external systems mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm backup in management apps is disabled and "Encrypt local backup" is enabled in iTunes (for Windows computer) and in Finder on Mac. Note: iTunes Backup/Finder backup is implemented by the configuration policy rule "Force encrypted backups", which is included in AIOS-16-010700 and therefore not included in the procedure below. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify backing up app data is disabled. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Apps". 6. Tap a "managed app". 7. Verify "App data will not be backed up" is listed. Note: Steps 6 and 7 must be performed for each managed app. If backing up app data is not disabled in the Apple iOS/iPadOS management tool or "app data will not be backed up" is not listed for each managed app on the iPhone and iPad, this is a finding.
+
+## Group: PP-MDF-323280
+
+**Group ID:** `V-254601`
+
+### Rule: Apple iOS/iPadOS 16 must not allow non-DoD applications to access DoD data.
+
+**Rule ID:** `SV-254601r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>App data sharing gives apps the ability to access the data of other apps for enhanced user functionality. However, sharing also poses a significant risk that unauthorized users or apps will obtain access to sensitive DoD information. To mitigate this risk, there are data sharing restrictions. If a user is allowed to make exceptions to the data sharing restriction policy, the user could enable unauthorized sharing of data, leaving it vulnerable to breach. Limiting the granting of exceptions to either the Administrator or common application developer mitigates this risk. Copy/paste of data between applications in different application processes or groups of application processes is considered an exception to the access control policy; therefore, the Administrator must be able to enable/disable the feature. Other exceptions include allowing any data or application sharing between process groups. SFR ID: FMT_SMF_EXT.1.1 #42, FDP_ACF_EXT.1.2</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow documents from managed apps in unmanaged apps" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow documents from managed apps in unmanaged apps" is unchecked. Alternatively, verify the text "<key>allowOpenFromManagedToUnmanaged</key><false/>" appears in the configuration profile (.mobileconfig file). On the iOS device: 1. Open the Settings app. 2. Tap "General". 3. Tap "VPN & Device Management". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Opening documents from managed to unmanaged apps not allowed" is listed. If "Allow documents from managed apps in unmanaged apps" is checked in the iOS management tool, "<key>allowOpenFromManagedToUnmanaged</key><true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Opening documents from managed to unmanaged apps not allowed", this is a finding.
+
+## Group: PP-MDF-323290
+
+**Group ID:** `V-254602`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to disable multiuser modes.
+
+**Rule ID:** `SV-254602r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Multiuser mode allows multiple users to share a mobile device by providing a degree of separation between user data. To date, no mobile device with multiuser mode features meets DoD requirements for access control, data separation, and nonrepudiation for user accounts. In addition, the MDFPP does not include design requirements for multiuser account services. Disabling multiuser mode mitigates the risk of not meeting DoD multiuser account security policies. SFR ID: FMT_SMF_EXT.1.1 #47a</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify multiuser mode (shared iPad) is disabled in the MDM console for iPadOS devices. This requirement is not applicable for iOS devices. If multiuser mode is not disabled in the MDM console for iPadOS devices, this is a finding.
+
+## Group: PP-MDF-323300
+
+**Group ID:** `V-254603`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to [selection: wipe protected data, wipe sensitive data] upon unenrollment from MDM.
+
+**Rule ID:** `SV-254603r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>When a mobile device is no longer going to be managed by MDM technologies, its protected/sensitive data must be sanitized because it will no longer be protected by the MDM software, putting it at much greater risk of unauthorized access and disclosure. At least one of the two options must be selected. SFR ID: FMT_SMF_EXT.2.1</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: Not all Apple iOS/iPadOS deployments involve MDM. If the site uses an authorized alternative to MDM for distribution of configuration profiles (Apple Configurator), this check procedure is not applicable. This check procedure is performed on the Apple iOS/iPadOS management tool or on the iOS device. In the Apple iOS/iPadOS management tool, for each managed app, verify the app is configured to be removed when the MDM profile is removed. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Apps". 6. Tap an app and verify "App and data will be removed when device is no longer managed" is listed. Repeat steps 5 and 6 for each managed app in the list. If one or more managed apps are not set to be removed upon device MDM unenrollment, this is a finding.
+
+## Group: PP-MDF-323310
+
+**Group ID:** `V-254604`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to [selection: remove Enterprise applications, remove all noncore applications (any nonfactory installed application)] upon unenrollment from MDM.
+
+**Rule ID:** `SV-254604r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>When a mobile device is no longer going to be managed by MDM technologies, its protected/sensitive data must be sanitized because it will no longer be protected by the MDM software, putting it at much greater risk of unauthorized access and disclosure. At least one of the two options must be selected. SFR ID: FMT_SMF_EXT.2.1</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: Not all Apple iOS/iPadOS deployments involve MDM. If the site uses an authorized alternative to MDM for distribution of configuration profiles (Apple Configurator), this check procedure is not applicable. This check procedure is performed on the Apple iOS/iPadOS management tool or on the iOS device. In the Apple iOS/iPadOS management tool, for each managed app, verify the app is configured to be removed when the MDM profile is removed. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Apps". 6. Tap an app and verify "App and data will be removed when device is no longer managed" is listed. Repeat steps 5 and 6 for each managed app in the list. If one or more managed apps are not set to be removed upon device MDM unenrollment, this is a finding.
+
+## Group: PP-MDF-323330
+
+**Group ID:** `V-254605`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to disable ad hoc wireless client-to-client connection capability.
+
+**Rule ID:** `SV-254605r987886_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Ad hoc wireless client-to-client connections allow mobile devices to communicate with each other directly, circumventing network security policies and making the traffic invisible. This could allow the exposure of sensitive DoD data and increase the risk of downloading and installing malware on the DoD mobile device. SFR ID: FMT_SMF_EXT.1.1/WLAN</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Determine if the site authorizing official (AO) has approved the use of AirDrop for unmanaged data transfer. Look for a document showing approval. If AirDrop is not approved, review configuration settings to confirm it is disabled. If AirDrop is approved, this requirement is not applicable. This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding (if the AO has not approved the use of AirDrop for unmanaged data transfer). If the iPhone or iPad being reviewed is supervised by the MDM, follow these procedures: This check procedure is performed on both the device management tool and the iPhone and iPad device. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Allow AirDrop" is unchecked. On the iPhone/iPad device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "AirDrop not allowed" is listed. If the AO has not approved AirDrop, and "AirDrop not allowed" is not listed in the management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254606`
+
+### Rule: Apple iOS/iPadOS 16 must require a valid password be successfully entered before the mobile device data is unencrypted.
+
+**Rule ID:** `SV-254606r959010_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Passwords provide a form of access control that prevents unauthorized individuals from accessing computing resources and sensitive data. Passwords may also be a source of entropy for generation of key encryption or data encryption keys. If a password is not required to access data, this data is accessible to any adversary who obtains physical possession of the device. Requiring that a password be successfully entered before the mobile device data is unencrypted mitigates this risk. Note: MDF PP v2.0 requires a Password Authentication Factor and requires management of its length and complexity. It leaves open whether the existence of a password is subject to management. This requirement addresses the configuration to require a password, which is critical to the cybersecurity posture of the device. SFR ID: FIA_UAU_EXT.1.1</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm the device is set to require a passcode before use. This procedure is performed on the iOS and iPadOS device. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the password policy. 5. Tap "Restrictions". 6. Tap "Passcode". 7. Verify "Passcode required" is set to "Yes". If "Passcode required" is not set to "Yes", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254607`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: limit Ad Tracking.
+
+**Rule ID:** `SV-254607r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Ad Tracking refers to the advertisers' ability to categorize the device and spam the user with ads that are most relevant to the user's preferences. By not "Force limiting ad tracking", advertising companies are able to gather information about the user and device's browsing habits. If "Limit Ad Tracking" is not limited, a database of browsing habits of DoD devices can be gathered and stored under no supervision of the DoD. By limiting ad tracking, this setting does not completely mitigate the risk, but it limits the amount of information gathering. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Force limited ad tracking" is checked. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Force limited ad tracking" is checked. Alternatively, verify the text "<key>forceLimitAdTracking</key><true/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Restrictions". 6. Verify "Limit ad tracking enforced" or "Requests to track from apps not allowed" is present. If "limited ad tracking enforced" is missing in the Apple iOS/iPadOS management tool, "<key>forceLimitAdTracking</key><false/>" does not appear in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Limit ad tracking enforced", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254608`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Not allow automatic completion of Safari browser passcodes.
+
+**Rule ID:** `SV-254608r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>The AutoFill functionality in the Safari web browser allows the user to complete a form that contains sensitive information, such as PII, without previous knowledge of the information. By allowing the use of the AutoFill functionality, an adversary who learns a user's iPhone or iPad passcode, or who otherwise is able to unlock the device, may be able to further breach other systems by relying on the AutoFill feature to provide information unknown to the adversary. By disabling the AutoFill functionality, the risk of an adversary gaining additional information about the device's user or compromising other systems is significantly mitigated. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Enable autofill" is unchecked. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Enable autofill" is unchecked. Alternatively, verify the text "<key>safariAllowAutoFill</key><false>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Restrictions". 6. Verify "Auto-fill in Safari not allowed" is present. If "Enable autofill" is checked in the Apple iOS/iPadOS management tool, "<key>safariAllowAutoFill</key><true>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Auto-fill in Safari not allowed", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254609`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Encrypt iTunes backups/Encrypt local backup.
+
+**Rule ID:** `SV-254609r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>When syncing an iPhone and iPad to a computer running iTunes, iTunes will prompt the user to back up the iPhone and iPad. If the performed backup is not encrypted, this could lead to the unauthorized disclosure of DoD sensitive information if non-DoD personnel are able to access that machine. By forcing the backup to be encrypted, this greatly mitigates the risk of compromising sensitive data. iTunes backup and USB connections to computers are not authorized, but this control provides defense-in-depth for cases in which a user violates policy either intentionally or inadvertently. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Force encrypted backups" is enabled in iTunes (Windows) or Finder (Mac). This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Encrypt local backup" is checked. Alternatively, verify the text "<key>forceEncryptedBackup</key><true/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Encrypt backups enforced" is listed. If "Encrypt local backup" is unchecked in the Apple iOS/iPadOS management tool, "<key>forceEncryptedBackup</key><false/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Encrypt backups enforced", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254610`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: not allow use of Handoff.
+
+**Rule ID:** `SV-254610r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Handoff permits a user of an iPhone and iPad to transition user activities from one device to another. Handoff passes sufficient information between the devices to describe the activity, but app data synchronization associated with the activity is handled though iCloud, which should be disabled on a compliant iPhone and iPad. If a user associates both DoD and personal devices to the same Apple ID, the user may improperly reveal information about the nature of the user's activities on an unprotected device. Disabling Handoff mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow Handoff" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow Handoff" is unchecked. Alternatively, verify the text "<key>allowActivityContinuation</key> <false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Handoff not allowed" is listed. If "Allow Handoff" is checked in the Apple iOS/iPadOS management tool, "<key>allowActivityContinuation</key> <true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "Handoff not allowed", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254611`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: require the user to enter a password when connecting to an AirPlay-enabled device for the first time.
+
+**Rule ID:** `SV-254611r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>When a user is allowed to use AirPlay without a password, it may mistakenly associate the iPhone and iPad with an AirPlay-enabled device other than the one intended (i.e., by choosing the wrong one from the AirPlay list displayed). This creates the potential for someone in control of a mistakenly associated device to obtain DoD sensitive information without authorization. Requiring a password before such an association mitigates this risk. Passwords do not require any administration and are not required to comply with any complexity requirements. SFR ID: FMT_SMF_EXT.1.1 #40</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Require passcode on first AirPlay pairing" is enabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Require passcode on first AirPlay pairing" is checked. Alternatively, verify the text "<key>forceAirPlayOutgoingRequestsPairingPassword</key><false/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "AirPlay outgoing requests pairing password enforced" is listed. If "Require passcode on first AirPlay pairing" is unchecked in the Apple iOS/iPadOS management tool, "<key>forceAirPlayOutgoingRequestsPairingPassword</key><true/>" appears in the configuration profile, or the restrictions policy on the iPhone and iPad does not list "AirPlay outgoing requests pairing password enforced", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254612`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Disable Allow MailDrop.
+
+**Rule ID:** `SV-254612r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>MailDrop allows users to send large attachments (up to 5 GB) via iCloud. Storing data with a non-DoD cloud provider may leave the data vulnerable to breach. Disabling non-DoD cloud services mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow MailDrop" is disabled. This validation procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow MailDrop" is not checked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Accounts". 6. Tap the mail account. 7. Verify "Mail Drop Enabled" is set to "No". If "Allow MailDrop" is not disabled in the Apple iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad lists "Mail Drop Enabled" as "Yes", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254613`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Disable Allow Shared Albums.
+
+**Rule ID:** `SV-254613r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Storing data with a non-DoD cloud provider may leave the data vulnerable to breach. Disabling non-DoD cloud services mitigates this risk. Note: If the authorizing official (AO) has approved the use/storage of DoD data in one or more personal (unmanaged) apps, allowing unrestricted activity by the user in downloading and installing personal (unmanaged) apps on the iOS 14 device may not be warranted due to the risk of possible loss of or unauthorized access to DoD data. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement is not applicable if the AO has approved users' full access to the Apple App Store for downloading unmanaged (personal) apps and syncing personal data on the device with personal cloud data storage accounts. The site must have an AO-signed document showing the AO has assumed the risk for users' full access to the Apple App Store. Review configuration settings to confirm "Allow Shared Albums" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow Shared Albums" is not checked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "iCloud Photos not allowed" is listed. If "Allow Shared Albums" is not disabled in the Apple iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad does not list "iCloud Photos not allowed", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254614`
+
+### Rule: iPhone and iPad must have the latest available iOS/iPadOS operating system installed.
+
+**Rule ID:** `SV-254614r959010_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Required security features are not available in earlier OS versions. In addition, earlier versions may have known vulnerabilities. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm the most recently released version of iOS is installed. This validation procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Go to https://www.apple.com and determine the most current version of iOS released by Apple. In the MDM management console, review the version of iOS installed on a sample of managed devices. This procedure will vary depending on the MDM product. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "About" and view the installed version of iOS. 4. Go back to the "General" screen. Tap "Software Update" and verify the following message is shown on the screen: "Your software is up to date." If the installed version of iOS on any reviewed iOS/iPadOS devices is not the latest released by Apple, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254615`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: use SSL for Exchange ActiveSync.
+
+**Rule ID:** `SV-254615r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Exchange email messages are a form of data in transit and thus are vulnerable to eavesdropping and man-in-the-middle attacks. Secure Sockets Layer (SSL), also referred to as Transport Layer Security (TLS), provides encryption and authentication services that mitigate the risk of breach. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Use SSL" for the Exchange account is enabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Use SSL" is checked under the Exchange payload. Alternatively, verify the text "<key>SSL</key><true/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the Exchange policy. 5. Tap "Accounts". 6. Tap the name of the Exchange account. 7. Verify "SSL" is set to "Yes". If "Use SSL" is unchecked in the Apple iOS/iPadOS management tool, "<key>SSL</key><false/>" appears in the configuration profile, or the Exchange policy on the iPhone and iPad has "SSL" set to "No", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254616`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: not allow messages in an ActiveSync Exchange account to be forwarded or moved to other accounts in the Apple iOS/iPadOS 16 Mail app.
+
+**Rule ID:** `SV-254616r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The Apple iOS/iPadOS Mail app can be configured to support multiple email accounts concurrently. These email accounts are likely to involve content of varying degrees of sensitivity (e.g., both personal and enterprise messages). To prevent the unauthorized and undetected forwarding or moving of messages from one account to another, Mail ActiveSync Exchange accounts can be configured to block such behavior. While users may still send a message from the Exchange account to another account, these transactions must involve an Exchange server, enabling audit records of the transaction, filtering of mail content, and subsequent forensic analysis. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow messages to be moved" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Allow messages to be moved" is unchecked under the Exchange payload. Alternatively, verify the text "<key>PreventMove</key><true/>" appears in the configuration profile (.mobileconfig file). On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the Exchange policy. 5. Tap "Accounts". 6. Tap the "name of the Exchange account". 7. Verify "Prevent Move" is set to "Yes". If "Allow messages to be moved" is checked in the Apple iOS/iPadOS management tool, "<key>PreventMove</key><false/>" appears in the configuration profile, or the Exchange policy on the iPhone and iPad has "Prevent Move" set to "No", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254617`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Treat AirDrop as an unmanaged destination.
+
+**Rule ID:** `SV-254617r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>AirDrop is a way to send contact information or photos to other users with AirDrop enabled. This feature enables a possible attack vector for adversaries to exploit. Once the attacker has gained access to the information broadcast by this feature, the attacker may distribute this sensitive information very quickly and without DoD's control or awareness. By disabling this feature, the risk of mass data exfiltration will be mitigated. Note: If the site uses Apple's optional Automatic Device Enrollment, this control is available as a supervised MDM control. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Treat AirDrop as an unmanaged destination" is enabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Treat AirDrop as unmanaged destination" is checked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Sharing managed documents using AirDrop not allowed" is listed. If "Treat AirDrop as unmanaged destination" is disabled in the Apple iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad does not list "Sharing managed documents using AirDrop not allowed", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254618`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Not have any Family Members in Family Sharing.
+
+**Rule ID:** `SV-254618r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Apple's Family Sharing service allows Apple iOS/iPadOS users to create a Family Group whose members have several shared capabilities, including the ability to lock, wipe, play a sound on, or locate the iPhone and iPads of other members. Each member of the group must be invited to the group and accept that invitation. A DoD user's iPhone and iPad may be inadvertently or maliciously wiped by another member of the Family Group. This poses a risk that the user could be without a mobile device for a period of time or lose sensitive information that has not been backed up to other storage media. Configuring iPhone and iPads so their associated Apple IDs are not members of Family Groups mitigates this risk. Note: If the site uses Apple's optional Automatic Device Enrollment, this control is available as a supervised MDM control. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm Family Sharing is disabled. Note that this is a User-Based Enforcement (UBE) control, which cannot be managed by an MDM server. This check procedure is performed on the iPhone and iPad. On the iPhone and iPad: 1. Open the Settings app. 2. At the top of the screen, if "Sign in to your iPhone" is listed, this requirement has been met. 3. If the user profile is signed into iCloud, tap the user name. 4. Tap "Family Sharing". 5. Verify no accounts are listed other than the "Organizer". Note: The iPhone and iPad must be connected to the internet to conduct this validation procedure. Otherwise, the device will display the notice "Family information is not available", in which case configuration compliance cannot be determined. If accounts (names or email addresses) are listed under "FAMILY MEMBERS" on the iPhone and iPad, this is a finding. Note: If the site has implemented Automatic Device Enrollment, this setting can be managed via the MDM (supervised mode).
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254619`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Not share location data through iCloud.
+
+**Rule ID:** `SV-254619r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Sharing of location data is an operational security (OPSEC) risk because it potentially allows an adversary to determine a DoD user's location, movements, and patterns in those movements over time. An adversary could use this information to target the user or gather intelligence on the user's likely activities. Using commercial cloud services to store and handle location data could leave the data vulnerable to breach, particularly by sophisticated adversaries. Disabling the use of such services mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Share My Location" is disabled. Note that this is a User-Based Enforcement (UBE) control, which cannot be managed by an MDM server. This check procedure is performed on the iPhone and iPad only. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "Privacy & Security". 3. Tap "Location Services". 4. If the authorizing official (AO) has not approved use of personal iCloud accounts on the device, verify "Share My Location" is grayed out (cannot be selected). 5. If the AO has approved the use of personal iCloud accounts on the device, tap "Share My Location". 6. Verify "Share My Location" is off. If "Share My Location" is not grayed out (cannot be selected) when the AO has not approved use of personal iCloud accounts on the device, this is a finding. If "Share My Location" is toggled to the right and appears green on the iPhone and iPad when the AO has approved the use of personal iCloud accounts, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254620`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Force Apple Watch wrist detection.
+
+**Rule ID:** `SV-254620r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Because Apple Watch is a personal device, it is key that any sensitive DoD data displayed on the Apple Watch cannot be viewed when the watch is not in the immediate possession of the user. This control ensures the Apple Watch screen locks when the user takes the watch off, thereby protecting sensitive DoD data from possible exposure. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Force Apple Watch wrist detection" is enabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS/iPadOS management tool, verify "Wrist detection enforced on Apple Watch" is enforced. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the Apple iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Wrist detection enforced on Apple Watch" is listed. If "Wrist detection enforced on Apple Watch" is not enforced in the Apple iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad does not list "Wrist detection enforced on Apple Watch", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254621`
+
+### Rule: Apple iOS/iPadOS 16 users must complete required training.
+
+**Rule ID:** `SV-254621r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The security posture on iOS devices requires the device user to configure several required policy rules on their device. User-Based Enforcement (UBE) is required for these controls. In addition, if the authorizing official (AO) has approved users' full access to the Apple App Store, users must receive training on risks. If a user is not aware of their responsibilities and does not comply with UBE requirements, the security posture of the iOS mobile device and DoD sensitive data may become compromised. SFR ID: NA</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review a sample of site User Agreements for iOS device users or similar training records and training course content. Verify iPhone and iPad users have completed required training. If any iPhone/iPad user has not completed required training, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254622`
+
+### Rule: A managed photo app must be used to take and store work-related photos.
+
+**Rule ID:** `SV-254622r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The iOS Photos app is unmanaged and may sync photos with a device user's personal iCloud account. Therefore, work-related photos must not be taken via the iOS camera app or stored in the Photos app. A managed photo app must be used to take and manage work-related photos. SFR ID: NA</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm a managed photos app is installed on the iOS device. This check procedure is performed on the iPhone and iPad. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the DoD Configuration Profile from the Apple iOS/iPadOS management tool. 5. Tap "Apps". 6. Verify a photo capture and management app is listed. If a managed photo capture and management app is not installed on the iPhone and iPad, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254623`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Enable USB Restricted Mode.
+
+**Rule ID:** `SV-254623r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The USB lightning port on an iOS device can be used to access data on the device. The required settings ensure the Apple device password is entered before a previously trusted USB accessory can connect to the device. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This is a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Allow USB Restricted Mode" is enabled. This check procedure is performed on both the device management tool and the iPhone and iPad device. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow USB Restricted Mode" is checked (set to "True"). On the iPhone/iPad device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify there is no listing for "USB Accessories while locked allowed". If "Allow USB Restricted Mode" is not enabled in the management tool and there is a restriction in listed the profile on the Apple device, this is a finding. Note: The default configuration setting for "allow USB Restricted Mode" is "True" in most MDM products. This is the required setting. When set correctly, nothing will be listed in the Restrictions profile, and the user will be able to toggle USB accessories on/off. Note: "Allow USB Restricted Mode" may be called "Allow USB accessories while device is locked" in some MDM consoles. The required logic is to disable USB accessory connections when the device is locked.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254624`
+
+### Rule: Apple iOS/iPadOS 16 must not allow managed apps to write contacts to unmanaged contacts accounts.
+
+**Rule ID:** `SV-254624r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Managed apps have been approved for the handling of DoD sensitive information. Unmanaged apps are provided for productivity and morale purposes but are not approved to handle DoD sensitive information. Examples of unmanaged apps include those for news services, travel guides, maps, and social networking. If a document were to be viewed in a managed app and the user had the ability to open this same document in an unmanaged app, this could lead to the compromise of sensitive DoD data. In some cases, the unmanaged apps are connected to cloud backup or social networks that would permit dissemination of DoD sensitive information to unauthorized individuals. Not allowing data to be opened within unmanaged apps mitigates the risk of compromising sensitive data. SFR ID: FMT_SMF_EXT.1.1 #42, FDP_ACF_EXT.1.2</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow managed apps to write contacts to unmanaged contacts accounts" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the Apple iOS/iPadOS device. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Allow managed apps to write contacts to unmanaged contacts accounts" is unchecked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Allow managed apps to write contacts to unmanaged contacts accounts" is not listed. If "Allow managed apps to write contacts to unmanaged contacts accounts" is checked in the iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad lists "Allow managed apps to write contacts to unmanaged contacts accounts", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254625`
+
+### Rule: Apple iOS/iPadOS 16 must not allow unmanaged apps to read contacts from managed contacts accounts.
+
+**Rule ID:** `SV-254625r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Managed apps have been approved for the handling of DoD sensitive information. Unmanaged apps are provided for productivity and morale purposes but are not approved to handle DoD sensitive information. Examples of unmanaged apps include those for news services, travel guides, maps, and social networking. If a document were to be viewed in a managed app and the user had the ability to open this same document in an unmanaged app, this could lead to the compromise of sensitive DoD data. In some cases, the unmanaged apps are connected to cloud backup or social networks that would permit dissemination of DoD sensitive information to unauthorized individuals. Not allowing data to be opened within unmanaged apps mitigates the risk of compromising sensitive data. SFR ID: FMT_SMF_EXT.1.1 #42, FDP_ACF_EXT.1.2</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow unmanaged apps to read contacts from managed contacts accounts" is disabled. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow unmanaged apps to read contacts from managed contacts accounts" is unchecked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS/iPadOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Allow unmanaged apps to read contacts from managed contacts accounts" is not listed. If "Allow unmanaged apps to read contacts from managed contacts accounts" is checked in the iOS/iPadOS management tool or the restrictions policy on the iPhone and iPad lists "Allow unmanaged apps to read contacts from managed contacts accounts", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254626`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Disable AirDrop.
+
+**Rule ID:** `SV-254626r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>AirDrop is a way to send contact information or photos to other users with this same feature enabled. This feature enables a possible attack vector for adversaries to exploit. Once the attacker has gained access to the information broadcast by this feature, the attacker may distribute this sensitive information very quickly and without DoD's control or awareness. By disabling this feature, the risk of mass data exfiltration will be mitigated. Note: If the site uses Apple's optional Automatic Device Enrollment, this control is available as a supervised MDM control. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Determine if the site authorizing official (AO) has approved the use of AirDrop for unmanaged data transfer. Look for a document showing approval. If AirDrop is not approved, review configuration settings to confirm it is disabled. If approved, this requirement is not applicable. This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding (if the AO has not approved the use of AirDrop for unmanaged data transfer). If the iPhone or iPad being reviewed is supervised by the MDM, follow these procedures: This check procedure is performed on both the device management tool and the iPhone and iPad device. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Allow AirDrop" is unchecked. On the iPhone/iPad device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "AirDrop not allowed" is listed. If the AO has not approved AirDrop and "AirDrop not allowed" is not listed in the management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254627`
+
+### Rule: Apple iOS/iPadOS 16 must implement the management setting: Disable paired Apple Watch.
+
+**Rule ID:** `SV-254627r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Authorizing official (AO) approval is required before an Apple Watch (DoD-owned or personally owned) can be paired with a DoD-owned iPhone to ensure the AO has evaluated the risk in having sensitive DoD data transferred to and stored on an Apple Watch in their operational environment. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Determine if the site AO has approved the use of Apple Watch with DoD-owned iPhones. Look for a document showing approval. If not approved, review configuration settings to confirm "Allow Paired Watch" is disabled. If approved, this requirement is not applicable. This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding (if the AO has not approved the use of Apple Watch for unmanaged data transfer). If the iPhone or iPad being reviewed is supervised by the MDM, follow these procedures: This check procedure is performed on both the device management tool and the iPhone. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow Paired Watch" is unchecked. On the iPhone: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Paired Apple Watch not allowed" is listed. If the AO has not approved pairing an Apple Watch with a DoD-owned iPhone and "Paired Apple Watch not allowed" is not listed both in the management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254628`
+
+### Rule: Apple iOS/iPadOS 16 must disable Password AutoFill in browsers and applications.
+
+**Rule ID:** `SV-254628r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The AutoFill functionality in browsers and applications allows the user to complete a form that contains sensitive information, such as PII, without previous knowledge of the information. By allowing the use of the AutoFill functionality, an adversary who learns a user's iPhone and iPad passcode, or who otherwise is able to unlock the device, may be able to further breach other systems by relying on the AutoFill feature to provide information unknown to the adversary. By disabling the AutoFill functionality, the risk of an adversary gaining further information about the device's user or compromising other systems is significantly mitigated. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Password AutoFill is not allowed" is disabled. This check procedure is performed on both the iOS/iPadOS device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Password AutoFill is not allowed" is unchecked. On the iPhone/iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Password AutoFill is not allowed" is listed. If "Password AutoFill is not allowed" is not enabled both in the iOS/iPadOS management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254629`
+
+### Rule: Apple iOS/iPadOS 16 must disable allow setting up new nearby devices.
+
+**Rule ID:** `SV-254629r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>This control allows Apple device users to request passwords from nearby devices. This could lead to a compromise of the device password with an unauthorized person or device. DoD Apple device passwords must not be shared. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Allow setting up new nearby devices" is disabled. This check procedure is performed on both the iOS/iPadOS device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Proximity setup to a new device is not allowed" is unchecked. On the iPhone and iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Proximity setup to a new device is not allowed" is not listed. If "Proximity setup to a new device is not allowed" is disabled in the iOS/iPadOS management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254630`
+
+### Rule: Apple iOS/iPadOS 16 must disable password proximity requests.
+
+**Rule ID:** `SV-254630r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>This control allows one Apple device to be notified to share its password with a nearby device. This could lead to a compromise of the device password with an unauthorized person or device. DoD Apple device passwords must not be shared. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Allow Password Proximity Requests" is disabled. This check procedure is performed on both the device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow Password Proximity Requests" is unchecked. On the iPhone and iPad device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Proximity password requests not allowed" is listed. If "Proximity password requests not allowed" is not listed in the management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254631`
+
+### Rule: Apple iOS/iPadOS 16 must disable password sharing.
+
+**Rule ID:** `SV-254631r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>This control allows sharing passwords between Apple devices using AirDrop. This could lead to a compromise of the device password with an unauthorized person or device. DoD Apple device passwords must not be shared. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Password Sharing is not allowed" is enabled. This check procedure is performed on both the device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Password Sharing is not allowed" is checked. On the iPhone/iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Password Sharing is not allowed" is listed. If "Password Sharing is not allowed" is not enabled in the management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254632`
+
+### Rule: Apple iOS/iPadOS 16 must disable Find My Friends in the Find My app.
+
+**Rule ID:** `SV-254632r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>This control does not share a DoD user's location but encourages location sharing between DoD mobile device users, which can lead to operational security (OPSEC) risks. Sharing the location of a DoD mobile device is a violation of AIOS-16-011700. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Find My Friends" is disabled. This check procedure is performed on both the device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS/iPadOS management tool, verify "Find My Friends" and "Allow modifying Find My Friends" are unchecked. On the iPhone/iPad: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Find My Friends" is not listed. If "Find My Friends" and "Allow modifying Find My Friends" are not disabled in the management tool and on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254633`
+
+### Rule: The Apple iOS/iPadOS 16 must be supervised by the MDM.
+
+**Rule ID:** `SV-254633r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>When an iOS/iPadOS is not supervised, the DoD mobile service provider cannot control when new iOS/iPadOS updates are installed on site-managed devices. Most updates should be installed immediately to mitigate new security vulnerabilities, while some sites need to test each update prior to installation to ensure critical missions are not adversely impacted by the update. Several password and data protection controls can be implemented only when an Apple device is supervised. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm site-managed iOS/iPadOS devices are supervised. This check procedure is performed on both the Apple iOS/iPadOS management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify all managed Apple devices are supervised (verification procedure will vary by MDM product). Note: If the Apple device is not managed by an MDM and supervision is set up via Apple Configurator, this procedure is not applicable. On the iPhone and iPad: 1. Open the Settings app. 2. Verify a message similar to the following appears on the screen: "This iPad is supervised by (name of site DoD mobile service provider)." If site-managed iOS/iPadOS devices are not supervised, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254634`
+
+### Rule: Apple iOS/iPadOS 16 must disable "Allow USB drive access in Files app" if the authorizing official (AO) has not approved the use of DoD-approved USB storage drives with iOS/iPadOS devices.
+
+**Rule ID:** `SV-254634r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Unauthorized use of USB storage drives could lead to the introduction of malware or unauthorized software into the DoD IT infrastructure and compromise of sensitive DoD information and systems. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This requirement is not applicable if the AO has approved the use of USB drives to load files to Apple devices. The approval must be in writing and include which USB storage devices are approved for use. If the AO has not approved the use of USB drives to load files to Apple devices, use the following procedures to verify compliance. This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Allow USB drive access in Files app" is disabled. This check procedure is performed on both the device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow USB drive access in Files app" is unchecked. On the iPhone and iPad device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "USB drives not accessible in Files app" is listed. If "Allow USB drive access in Files app" is not disabled in the management tool and "USB drives not accessible in Files app" is not listed in the Restrictions profile on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254635`
+
+### Rule: The Apple iOS must be configured to disable automatic transfer of diagnostic data to an external device other than an MDM service with which the device has enrolled.
+
+**Rule ID:** `SV-254635r959010_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Many software systems automatically send diagnostic data to the manufacturer or a third party. This data enables the developers to understand real-world field behavior and improve the product based on that information. Unfortunately, it can also reveal information about what DoD users are doing with the systems and what causes them to fail. An adversary embedded within the software development team or elsewhere could use the information acquired to breach mobile operating system security. Disabling automatic transfer of such information mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #47a</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm "Allow sending diagnostic and usage data to Apple" is disabled. This check procedure is performed on both the iOS management tool and the iOS device. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow sending diagnostic and usage data to Apple" is unchecked. Alternatively, verify the text "<key>allowDiagnosticSubmission</key><false/>" appears in the configuration profile (.mobileconfig file). On the Apple iOS device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the management policy. 5. Tap "Restrictions". 6. Verify "Diagnostic submission not allowed". Note: This setting also disables "Share With App Developers". If "Allow sending diagnostic and usage data to Apple" is checked in the iOS management tool, "<key>allowDiagnosticSubmission</key><true/>" appears in the configuration profile, or the restrictions policy on the Apple iOS device from the Apple iOS management tool does not list "Diagnostic submission not allowed", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254636`
+
+### Rule: Apple iOS must implement the management setting: Not allow a user to remove Apple iOS configuration profiles that enforce DoD security requirements.
+
+**Rule ID:** `SV-254636r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Configuration profiles define security policies on Apple iOS devices. If a user is able to remove a configuration profile, the user can then change the configuration that had been enforced by that policy. Relaxing security policies may introduce vulnerabilities the profiles had mitigated. Configuring a profile to never be removed mitigates this risk. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Review configuration settings to confirm configuration profiles are not removable. This check procedure is performed on both the Apple iOS management tool and the Apple iOS device. The procedures below assume the site is not enrolled in Apple's Automatic Device Enrollment and are not applicable to devices under MDM management. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the Apple iOS management tool, verify "Security" is set to "Never" and "Automatically Remove Profile" is set to "Never". On the Apple iOS device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap each Configuration Profile from the Apple iOS management tool that contains the restrictions for the device. 5. Verify the "Remove Profile" button is not present. If on the Apple iOS management tool or the iOS device the "Remove Profile" button is available on the configuration profile, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254637`
+
+### Rule: Apple iOS/iPadOS 16 must disable "Allow network drive access in Files access".
+
+**Rule ID:** `SV-254637r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Allowing network drive access by the Files app could lead to the introduction of malware or unauthorized software into the DoD IT infrastructure and compromise of sensitive DoD information and systems. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This a supervised-only control. If the iPhone or iPad being reviewed is not supervised by the MDM, this control is automatically a finding. This check procedure is performed on both the device management tool and the iPhone and iPad. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow network drive access in Files access" is unchecked. On the iPhone and iPad device: 1. Open the Settings app. 2. Tap "General". 3. Tap "Profiles & Device Management" or "Profiles". 4. Tap the Configuration Profile from the iOS management tool containing the restrictions policy. 5. Tap "Restrictions". 6. Verify "Network drives not accessible in Files app" is listed. If "Allow network drive access in Files access" is not disabled in the management tool and "Network drives not accessible in Files app" is not listed in Profile Restrictions on the Apple device, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254638`
+
+### Rule: Apple iOS/iPadOS 16 must disable connections to Siri servers for the purpose of dictation.
+
+**Rule ID:** `SV-254638r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. Dictation information could contain sensitive DoD information and therefore should not leave the DoD control. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+If the iPhone or iPad being reviewed is supervised by the MDM, review configuration settings to confirm "Disable connections to Siri servers for the purpose of dictation" is disabled. This check procedure is performed on the device management tool. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Disable connections to Siri servers for the purpose of dictation" is checked. If connections to Siri servers are not disabled for dictation, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254639`
+
+### Rule: Apple iOS/iPadOS 16 must disable connections to Siri servers for the purpose of translation.
+
+**Rule ID:** `SV-254639r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. Translation information could contain sensitive DoD information and therefore should not leave the DoD control. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+This check procedure is performed on the device management tool. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Disable connections to Siri servers for the purpose of translation" is checked. If connections to Siri servers are not disabled for translation, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254640`
+
+### Rule: Apple iOS/iPadOS 16 must disable copy/paste of data from managed to unmanaged applications.
+
+**Rule ID:** `SV-254640r959010_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If a user is able to configure the security setting, the user could inadvertently or maliciously set it to a value that poses unacceptable risk to DoD information systems. An adversary could exploit vulnerabilities created by the weaker configuration to compromise DoD sensitive information. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Require managed pasteboard" is set to "True". If "Require managed pasteboard" is not set to "True", this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-254641`
+
+### Rule: Apple iOS/iPadOS 16 must be configured to disable Auto Unlock of the iPhone by an Apple Watch.
+
+**Rule ID:** `SV-254641r1015679_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Auto Unlock allows an Apple Watch to automatically unlock an iPhone or Mac when in close proximity (not available for iPad). This feature allows the iPhone/Mac to be unlocked without the user entering the device passcode, which may lead to unauthorized users access to the iPhone/Mac and sensitive DOD data. This control is not applicable if the authorizing official (AO) has approved the use of Apple Watches. SFR ID: FMT_MOF_EXT.1.2 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Determine if the site AO has approved the use of Apple Watch with DOD-owned iPhones. Look for a document showing approval. If not approved, review configuration settings to confirm "Allow Auto Unlock" is disabled. If approved, this requirement is not applicable. This check procedure is performed on the device management tool. Note: If an organization has multiple configuration profiles, the check procedure must be performed on the relevant configuration profiles applicable to the scope of the review. In the iOS management tool, verify "Allow auto unlock" is not checked. If Allow auto unlock is enabled, this is a finding.
+
+## Group: PP-MDF-990000
+
+**Group ID:** `V-274441`
+
+### Rule: All Apple iOS/iPadOS 16 installations must be removed.
+
+**Rule ID:** `SV-274441r1099855_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Apple iOS/iPadOS 16 is no longer supported by Apple and therefore, may contain security vulnerabilities. SFR ID: FMT_SMF_EXT.1.1 #47</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify there are no installations of Apple iOS/iPadOS 16 at the site. If Apple iOS/iPadOS 16 is being used at the site, this is a finding.
+

@@ -1,0 +1,429 @@
+# STIG Benchmark: Red Hat Ansible Automation Controller Web Server Security Technical Implementation Guide
+
+---
+
+**Version:** 1
+
+**Description:**
+This Security Technical Implementation Guide is published as a tool to improve the security of Department of Defense (DOD) information systems. The requirements are derived from the National Institute of Standards and Technology (NIST) 800-53 and related documents. Comments or proposed revisions to this document should be sent via email to the following address: disa.stig_spt@mail.mil.
+
+## Group: SRG-APP-000001-WSR-000002
+
+**Group ID:** `V-256940`
+
+### Rule: The Automation Controller web server must manage sessions.
+
+**Rule ID:** `SV-256940r954670_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Session management on client and server is required to protect identity and authorization information. Sessions for the Automation Controller web server, if compromised, could lead to execution of jobs on remote endpoints as if authenticated. Satisfies: SRG-APP-000001-WSR-000002, SRG-APP-000001-WSR-000001, SRG-APP-000295-WSR-000012, SRG-APP-000295-WSR-000134</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Log in to Automation Controller as an administrator and navigate to Settings >> System >> Miscellaneous Authentication. The following parameters must be set: OAuth 2 Timeout Settings < 1800 seconds (No more than 30 minutes). The maximum number of simultaneous logged session must not be less than 0 (The default is -1) and must not match the organizationally defined maximum. Disable the built-in authentication system = ON Enable HTTP Basic Auth = Off OAuth 2 Timeout settings: "ACCESS_TOKEN_EXPIRE_SECONDS": 31536000000, "AUTHORIZATION_CODE_EXPIRE_SECONDS": 600, "REFRESH_TOKEN_EXPIRE_SECONDS": 2628000 Allow External Users to Create OAuth2 Tokens = Off Login redirect override URL = Not Configured or Blank Social Auth Organization Map = Null Social Auth Team Map = Null Social Auth User Fields = Null If any of these settings are incorrect, this is a finding.
+
+## Group: SRG-APP-000014-WSR-000006
+
+**Group ID:** `V-256941`
+
+### Rule: The Automation Controller servers must use encrypted communication for all channels given the high impact of those services to an organization's infrastructure.
+
+**Rule ID:** `SV-256941r954686_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The Automation Controller communicates information about configuration of other information systems through its web interface and API, storing records about this information in a database. Although large portions are sanitized of sensitive information, due to the nature of this kind of information, it must always be maximally protected. Leaked details of configuration for DOD enterprise information systems could lead to compromise, so all access to and from the Automation Controller servers must be encrypted.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server, a TLS Configuration Check validates the TLS version used by the server: NGINXCONF="nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}'" sudo grep ssl_protocols ${NGINXCONF} | grep 'ssl_protocols TLSv1.2;' || echo "FAILED" If "FAILED" is displayed, this is a finding. A TLS Configuration Check validates the ciphers used for the web server are provided by the underlying host operating system: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` sudo grep ssl_ciphers ${NGINXCONF} | grep -q '^ *ssl_ciphers PROFILE=SYSTEM;' || echo "FAILED" If "FAILED" is displayed, this is a finding. A Database TLS Configuration Check validates connections to required resources use TLS connections. Automation Controller may be configured to connect to PostgreSQL databases with or without TLS. The Administrator must check the contents of the file at /etc/tower/conf.d/postgres.py with root permissions to determine if pg_sslmode was configured with "verify-full" for any external databases at the time of installation. Execute the following command to test the client-side database configuration: sudo python3 -c 'exec(open("/etc/tower/conf.d/postgres.py").read()); [print(DATABASES[db]["OPTIONS"]["sslmode"]) for db in DATABASES if DATABASES[db]["HOST"] not in ("127.0.0.1", "localhost")]' | grep 'verify-full' || echo "FAILED" If "FAILED" is displayed, this is a finding. Execute the following commands to test the server-side database configuration: PGCON=`sudo python3 -c 'exec(open("/etc/tower/conf.d/postgres.py").read());print(":".join((DATABASES["default"]["HOST"],DATABASES["default"]["PORT"])))'` psql "postgresql://${PGCON}/postgres?sslmode=require" 2>/dev/null || echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000015-WSR-000014
+
+**Group ID:** `V-256942`
+
+### Rule: The Automation Controller NGINX web server must use cryptography on all remote connections.
+
+**Rule ID:** `SV-256942r954688_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Nondisplayed data on a web page may expose information that could put the organization at risk and negatively affect data integrity. Automation Controller's web server must be configured such that all connections, regardless of their origin, between the server and the user are encrypted using cryptography.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As any user, execute the following command, substituting "<controller_fqdn>" for the hostname of the Automation Controller: curl -s -w '%{redirect_url}\n' -o /dev/null http://<controller_fqdn>/api/v2/ping/ | grep '^https' >/dev/null || echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000016-WSR-000005
+
+**Group ID:** `V-256943`
+
+### Rule: The Automation Controller must generate the appropriate log records.
+
+**Rule ID:** `SV-256943r954690_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Automation Controller's web server must log all details related to user sessions in support of troubleshooting, debugging, and forensic analysis. Without a data logging feature, the organization loses an important auditing and analysis tool for event investigations. Satisfies: SRG-APP-000016-WSR-000005, SRG-APP-000095-WSR-000056, SRG-APP-000096-WSR-000057, SRG-APP-000097-WSR-000058, SRG-APP-000098-WSR-000059, SRG-APP-000098-WSR-000060, SRG-APP-000099-WSR-000061, SRG-APP-000100-WSR-000064</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+For each Automation Controller host, determine whether the web server is logging all content related to user sessions. Log in to Automation Controller as an administrator and navigate to console Settings >> System >> Miscellaneous System. Verify the following settings: Enable Activity Stream = On Enable Activity Stream for Inventory Sync = On Organization Admins Can Manage Users and Teams = On All Users Visible to Organization Admins = On If the configuration settings are not as above, this is a finding.
+
+## Group: SRG-APP-000131-WSR-000051
+
+**Group ID:** `V-256944`
+
+### Rule: All Automation Controller NGINX front-end web server files must be verified for their integrity (e.g., checksums and hashes) before becoming part of the production web server.
+
+**Rule ID:** `SV-256944r954816_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Being able to verify that a patch, upgrade, certificate, etc., being added to the web server is unchanged from the producer of the file is essential for file validation and nonrepudiation of the information. The Automation Controller NGINX web server host must have a mechanism to verify that files are valid prior to installation.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator, for each Automation Controller NGINX web server host, verify the integrity of the Automation Controller NGINX web server hosts files: aide --check Verify the displayed checksums against previously reserved checksums of the Advanced Intrusion Detection Environment (AIDE) database. If there are any unauthorized or unexplained changes against previous checksums, this is a finding.
+
+## Group: SRG-APP-000131-WSR-000073
+
+**Group ID:** `V-256945`
+
+### Rule: Expansion modules must be fully reviewed, tested, and signed before they can exist on a production Automation Controller NGINX front-end web server.
+
+**Rule ID:** `SV-256945r954816_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>In the case of a production web server, areas for content development and testing will not exist, as this type of content is only permissible on a development website. The process of developing on a functional production website entails a degree of trial and error and repeated testing. This process is often accomplished in an environment where debugging, sequencing, and formatting of content are the main goals. The opportunity for a malicious user to obtain files that reveal business logic and login schemes is high in this situation. The existence of such immature content on a web server represents a significant security risk that is totally avoidable. The Automation Controller NGINX front-end web server must enforce, either internally or through an external utility, the signing of modules before they are implemented into a production environment. By signing modules, the author guarantees that the module has been reviewed and tested before production implementation.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+The Automation Controller does not require any nginx dynamic expansion modules to function. Determine if any dynamic modules are specified in the nginx configuration. As a system administrator for each Automation Controller NGINX web server host execute the following: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` NGINXMODPATH=`nginx -V 2>&1 | tr ' ' '\n' | grep modules-path | sed -ne '/modules-path/{s/.*modules-path=\(.*\)/\1/;p}'` NGINXMODINC=`grep include /etc/nginx/nginx.conf | grep modules | awk '{print $2}' | xargs dirname` grep -q load_module ${NGINXCONF} && echo FAILED [ `ls -1 $NGINXMODPATH | wc -l` == 0 ] || echo FAILED [ `ls -1 $NGINXMODINC | wc -l` == 0 ] || echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000141-WSR-000015
+
+**Group ID:** `V-256946`
+
+### Rule: All Automation Controller NGINX front-end web servers must not perform user management for hosted applications.
+
+**Rule ID:** `SV-256946r954822_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Web servers require enterprise-wide user management capability in order to prevent unauthorized access, with features like attempt lockouts and password complexity requirements. Unauthorized access to the web server makes the web server and the organization vulnerable to attack. Note: The underlying NGINX web server does not perform user management or authentication. The Automation Controller includes user management and authentication capabilities. However, the user management controls built into Automation Controller may not be sufficient to enforce the appropriate level of password, sessions, and other policies required. It is strongly recommended that Automation Controller be configured to use the organization's Identity Management/Authentication Service. This may be an AD/LDAP service, OIDC, or other supported authentication service.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a system administrator for each Automation Controller NGINX web server host, navigate to Settings >> Authentication. Review the configuration and verify that the appropriate authentication service is configured. If no authentication service is configured, this is a finding.
+
+## Group: SRG-APP-000141-WSR-000076
+
+**Group ID:** `V-256947`
+
+### Rule: All Automation Controller NGINX web servers must not be a proxy server for any process other than the Automation Controller application.
+
+**Rule ID:** `SV-256947r954822_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The Automation Controller NGINX web server must be primarily a web server or a proxy server but not both, for the same reasons that other multi-use servers are not recommended. Scanning for web servers that will also proxy requests into an otherwise protected network is a very common anonymous attack. In a scenario where Automation Controller is still reachable without use of the proxy/load balancer or when the proxy does not validate the header, X-Forwarded-For can be spoofed fairly easily to fake the originating IP addresses. Using HTTP_X_FORWARDED_FOR in the REMOTE_HOST_HEADERS setting poses a vulnerability that essentially gives users access to certain resources that they must not have. Satisfies: SRG-APP-000141-WSR-000076, SRG-APP-000141-WSR-000083, SRG-APP-000141-WSR-000087</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a system administrator for each Automation Controller NGINX web server host, ensure that the only upstream servers configured are for the Automation Controller ASGI and WSGI modules: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` sudo grep -E 'proxy_pass|uwsgi_pass' $NGINXCONF | grep -Pqz '^\s+proxy_pass http://daphne;\n\s+uwsgi_pass uwsgi;\n$' || echo FAILED [ "`sudo grep -Pzo 'upstream\s+daphne\s+{[^}]+}' $NGINXCONF | grep -a server | grep -v 'server unix:/var/run/tower/daphne.sock;'`" == '' ] || echo FAILED [ "`sudo grep -Pzo 'upstream\s+uwsgi\s+{[^}]+}' $NGINXCONF | grep -a server | grep -v 'server unix:/var/run/tower/uwsgi.sock;'`" == '' ] || echo FAILED If "FAILED" is displayed, this is a finding. Ensure all locations are served by either these upstream servers or other well-known content: [ "`sudo grep location $NGINXCONF | grep -v '^\s*#' | grep -Ev '^\s+location\s+/(favicon.ico|static|websocket)?\s+{'`" == "" ] || echo "FAILED" sudo grep -Eq 'location\s+/favicon.ico\s+{\s+alias\s+/var/lib/awx/public/static/media/favicon.ico;\s+}' $NGINXCONF || echo "FAILED" sudo grep -Eq 'location\s+/static\s+{\s+alias\s+/var/lib/awx/public/static;\s+}' $NGINXCONF || echo "FAILED" sudo grep -Pzo 'location\s+/websocket\s+({([^{}]|(?1))*})' $NGINXCONF | grep -Eq '^\s+proxy_pass\s+http://daphne;' || echo "FAILED" sudo grep -Pzo 'location\s+/\s+({([^{}]|(?1))*})' $NGINXCONF | grep -Eq '^\s+uwsgi_pass\s+uwsgi;' || echo "FAILED" If "FAILED" is displayed, this is a finding. Verify the content present and served from the static content location (/var/lib/awx/public/static) is acceptable per organizationally defined policy. If any content present in this location (or its subdirectories) is not acceptable per organizationally defined policy, this is a finding.
+
+## Group: SRG-APP-000141-WSR-000078
+
+**Group ID:** `V-256948`
+
+### Rule: All Automation Controller NGINX webserver accounts not utilized by installed features (i.e., tools, utilities, specific services, etc.) must not be created and must be deleted when the web server feature is uninstalled.
+
+**Rule ID:** `SV-256948r954822_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>If web server accounts are not being used, they must be deleted when the web server is uninstalled. This is because the accounts become stale over time and are not tended to. Best practice also dictates that if accounts are not going to be used, they must not be created for the same reason. Both situations create an opportunity for web server exploitation. When accounts used for web server features such as documentation, sample code, example applications, tutorials, utilities, and services are created, even though the feature is not installed, they become an exploitable threat to a web server. These accounts become inactive and are not monitored through regular use, and passwords for the accounts are not created or updated. An attacker can use these accounts to gain access to the web server and begin investigating ways to elevate the account privileges. The accounts used for all Automation Controller NGINX web server features not installed must not be created and must be deleted when these features are uninstalled.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server, examine NGINX users in /etc/passwd. Verify a single user "nginix" exists using the command: [ `grep -c nginx /etc/passwd` == 1 ] || echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000141-WSR-000081
+
+**Group ID:** `V-256949`
+
+### Rule: All Automation Controller NGINX web servers must have Multipurpose Internet Mail Extensions (MIME) that invoke OS shell programs disabled.
+
+**Rule ID:** `SV-256949r954822_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Controlling what a user of a hosted application can access is part of the security posture of the Automation Controller NGINX web server. Any time a user can access more functionality than is needed for the operation of the hosted application, it poses a security issue. A user with too much access can view information that is not needed for the user's job role, or the user could use the function in an unintentional manner. A MIME tells the Automation Controller NGINX web servers what type of program various file types and extensions are and what external utilities or programs are needed to execute the file type. A shell is a program that serves as the basic interface between the user and the operating system, so hosted application users must not have access to these programs. Shell programs may execute shell escapes and can then perform unauthorized activities that could damage the security posture of Automation Controller.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server, check the allowed mime types and associated shell applications: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; MIME_TYPES=`grep mime $NGINXCONF | awk '{printf $2}' | sed 's/;$//' ` ; disallowed_mime_types=('application.*\sbin' 'application.*\sexe' 'application.*\srpm' 'application.*\smsi' 'application.*\smsp application.*\smsm' 'application.*\sjs') ; echo "${disallowed_mime_types[*]}" | tr ' ' '\n' >tempfile ; cat $MIME_TYPES | grep -f tempfile 1>/dev/null && echo "FAILED"; rm -f tempfile If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000141-WSR-000085
+
+**Group ID:** `V-256950`
+
+### Rule: All Automation Controller NGINX web servers must have Web Distributed Authoring (WebDAV) disabled.
+
+**Rule ID:** `SV-256950r954822_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Automation Controller NGINX web servers can be installed with functionality that, just by its nature, is not secure. Web Distributed Authoring (WebDAV) is an extension to the HTTP protocol that, when developed, was meant to allow users to create, change, and move documents on a server, typically a web server or web share. Allowing this functionality, development, and deployment is much easier for web authors. WebDAV is not widely used and has serious security concerns because it may allow clients to modify unauthorized files on the web server.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a system administrator, for each Automation Controller NGINX web server host, check the Automation Controller NGINX web server configuration for WebDAV modules: disallowed_modules=(nginx-dav-ext-module headers-more-nginx-module) ; echo "${disallowed_modules[*]}" | tr ' ' '\n' >tempfile ; nginx -V 2>&1 | grep module | tr ' ' '\n' | grep module | grep -v modules-path | grep -Ff tempfile && echo "FAILED"; rm -f tempfile If "FAILED" is displayed, this is a finding. Check the Automation Controller NGINX web server configuration for WebDAV modules for disallowed WebDAV verbs, COPY, MOVE, MKCOL, PROPFIND, PROPPATCH, LOCK, UNLOCK: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; grep dev_(.*)methods $NGINXCONF | grep 'COPY|MOVE|MKCO|PROPFIND|PROPPATCH|LOCK|UNLOCK' && echo 'FAILED' If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000141-WSR-000086
+
+**Group ID:** `V-256951`
+
+### Rule: All Automation Controller NGINX web servers must protect system resources and privileged operations from hosted applications.
+
+**Rule ID:** `SV-256951r954822_rule`
+**Severity:** low
+
+**Description:**
+<VulnDiscussion>Automation Controller NGINX web servers may host too many applications. Each application will need certain system resources and privileged operations to operate correctly. The Automation Controller NGINX web servers must be configured to contain and control the applications and protect the system resources and privileged operations from those not needed by the application for operation. Not limiting the application will exacerbate the potential harm a compromised application could cause to a system.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a system administrator for each Automation Controller NGINX web server host, check if SELinux is enabled in enforcing mode: getenforce | grep Enforcing >/dev/null || echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000142-WSR-000089
+
+**Group ID:** `V-256952`
+
+### Rule: All Automation Controller NGINX web servers must be configured to use a specified IP address and port.
+
+**Rule ID:** `SV-256952r954824_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>From a security perspective, it is important that all Automation Controller NGINX web servers are configured to use a specified IP address and port because “listening” on all IP addresses poses a vulnerability to the web server. Not confining the web server to a specified IP address and port puts all web server content at risk of access by bad actors wanting to take advantage of those resources.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, verify the web server is configured to use a static IP address and port. NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; grep '^\s*listen\s*\*\|\s*listen\s*\[.*\]\|\s*listen\s*0\.0\.0\.0\|\s*listen\s*\[.*\]|^\s*listen\s\+.*:[^[:digit:]\s]\+.*' $NGINXCONF && echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000176-WSR-000096
+
+**Group ID:** `V-256953`
+
+### Rule: Only authenticated system administrators or the designated PKI Sponsor for an Automation Controller NGINX web server must have access to any Automation Controller NGINX web server's private key.
+
+**Rule ID:** `SV-256953r954874_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Each Automation Controller NGINX web server's private key is used to prove the identity of the server to clients and securely exchange the shared secret key used to encrypt communications between the Automation Controller NGINX web server and clients. By gaining access to the private key, an attacker can pretend to be an authorized server and decrypt the SSL traffic between a client and the Automation Controller NGINX web server.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, verify the location of the NGINX configuration: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` TOWER_KEY=`sed -n 's/^\s*ssl_certificate_key\s*\(.*\);/\1/p' $NGINXCONF` stat -c "%a %U %G" $TOWER_KEY| grep "600 root awx" || echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000211-WSR-000030
+
+**Group ID:** `V-256954`
+
+### Rule: All Automation Controller NGINX web server accounts accessing the directory tree, the shell, or other operating system functions and utilities must only be administrative accounts.
+
+**Rule ID:** `SV-256954r954910_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>AIT is important to limit access to Automation Controller nginx web servers and provide access on a need-to-know basis. For example, only System Administrators must have access to all the system's capabilities, while the web administrator and associated staff require access and control of the web content and Automation Controller NGINX web server configuration files. Without close monitoring and control over access to the web server and its resources, there is the risk of unskilled personnel making mistakes, and a risk of characters performing malicious acts.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a system administrator for each Automation Controller NGINX web server host, enumerate all (nonroot) privileged users on the system: allowed_privileged_users=('root') ; echo "${allowed_privileged_users}" | tr ' ' '\n' >/tmp/allowed_privileged_users ; getent passwd | cut -f1 -d ':' | sudo xargs -L1 sudo -l -U | grep -v 'not allowed' | tail -n +3 | sed -n '/^User/s/User\s*\(\w*\).*/\1/p' | grep -v -f /tmp/allowed_privileged_users 1>/dev/null && echo "FAILED" ; rm -f /tmp/allowed_privileged_users If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000223-WSR-000011
+
+**Group ID:** `V-256955`
+
+### Rule: Cookies exchanged between any Automation Controller NGINX web server and any client, such as session cookies, must have security settings that disallow cookie access outside the originating Automation Controller NGINX web server and hosted application.
+
+**Rule ID:** `SV-256955r954924_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>It is important that cookies exchanged between any Automation Controller NGINX webserver and any client have security settings that do not allow cookie access outside the originating Automation Controller server and the hosted application. This is because exchanged cookies may have session information such as user credentials that enable the web server application and the client to maintain a persistent connection. If cookie access outside of the originating Automation Controller NGINX webserver and the hosted application are allowed, it puts the security of the server at risk of malicious acts by bad actors. Satisfies: SRG-APP-000223-WSR-000011, SRG-APP-000439-WSR-000154, SRG-APP-000439-WSR-000155</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+The Automation Controller application configures cookie properties appropriately by default. Any local modifications to cookie-related settings must be located and removed. As a System Administrator for each Automation Controller NGINX web server host, search for modified cookie variables in the Automation Controller configuration: sudo grep -r -E '(CSRF|SESSION)_COOKIE_(HTTPONLY|SECURE|SAMESITE)' /etc/tower/settings.py /etc/tower/conf.d/ If any output is shown, this is a finding.
+
+## Group: SRG-APP-000233-WSR-000146
+
+**Group ID:** `V-256956`
+
+### Rule: The Automation Controller NGINX web server document directory must be in a separate partition from the web server's system files.
+
+**Rule ID:** `SV-256956r956025_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>It is important that Automation Controller NGINX web server restricts the ability of clients to launch denial-of-service (DoS) attacks against other information systems or networks by disallowing access to system files via document and system file partitioning. DoS attacks are an attempt to negatively affect the availability of the server to end users through directory traversal and URL manipulation. An attack could compromise the end user’s access to websites and applications, which could be critical. If a client is allowed to enable a DoS attack through access to system files, it means that the whole server or network could be shut down. In a best-case scenario, it could deny the user access to required websites and applications, which poses a threat to productivity as well as the need to spend time researching and resolving the attack. This is why it is important that Automation Controller NGINX web server does not allow access to any system files.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Automation Controller serves static public content from the directory /var/lib/awx/public. As a System Administrator for each Automation Controller NGINX web server host, verify that a separate file system/partition has been created for /var/lib/awx/public: [[ $(sudo awk '$0~"/var/lib/awx/public" {print $2}' /etc/fstab) == "/var/lib/awx/public" ]] || echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000251-WSR-000157
+
+**Group ID:** `V-256957`
+
+### Rule: The Automation Controller NGINX web server must limit the character set used for data entry.
+
+**Rule ID:** `SV-256957r954952_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>It is important that Automation Controller NGINX web server limit the character set used for data entry and disallow Unicode use in hosted applications to avoid application compromise. Definition of the available character set for data entry can trap efforts to bypass security checks. The presence of nonstandard characters may cause the browser to interpret the content using a different character set than the defined one, because the system may interpret the content using a different CHARSET. Nonstandard encodings like UTF-7 can be used to bypass the application's defensive filters. If character sets for data entry are not defined, it leaves open the door for attackers to bypass security checks and make the server vulnerable to malicious attack.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server, verify the configuration requires a charset is mandatory. NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; grep 'charset_required' $NGINXCONF || echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000266-WSR-000142
+
+**Group ID:** `V-256958`
+
+### Rule: The Automation Controller NGINX web server must display a default hosted application web page, not a directory listing, when a requested web page cannot be found.
+
+**Rule ID:** `SV-256958r954958_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>It is important that Automation Controller NGINX web server display a default hosted application web paged and not a directory listing when a requested web page cannot be found, because the web server will be vulnerable to intrusion. For this reason, access to directory listings must be disabled. If a user or attacker have access to the website directory listing, they may have access to all the files in that folder. Additionally, they may be privy to specific details regarding the web server.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+For each Automation Controller NGINX web server, a system administrator must view to see whether autoindex is turned on or off (autoindex on/autoindex off): NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; grep -E 'autoindex\s+on' $NGINXCONF && echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000266-WSR-000160
+
+**Group ID:** `V-256959`
+
+### Rule: Debugging and trace information, within Automation Controller NGINX web server, used to diagnose the web server must be disabled.
+
+**Rule ID:** `SV-256959r954958_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>It is important that Automation Controller NGINX web server debugging and trace information used to diagnose the web server is disabled, because debugging information can yield information about the Automation Controller NGINX webserver, like web server type, version, patches installed, plugins, modules, the hosted app’s code type. Back ends used for storage could be revealed, as well. An attacker would not need to cause an error condition to gain this information because they could reside in logs and general messages. If debugging/trace information is enabled, attackers could get the information from logs and general information, without drawing attention to themselves via an error message.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+For each Automation Controller NGINX web server, a system administrator must check to determine if any error or debug information is being logged or generated: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; cat $NGINXCONF | grep '^\s*error_log' && echo FAILED If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000340-WSR-000029
+
+**Group ID:** `V-256960`
+
+### Rule: Nonprivileged accounts on the hosting system must only access Automation Controller NGINX web server security-relevant information and functions through a distinct administrative account.
+
+**Rule ID:** `SV-256960r955082_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>It is important that Automation Controller NGINX web server security features are separated from nonprivileged users. Special “privileged” roles need to be developed so that only they can have access to those features and administer the web server, when necessary. These privileged roles will be better trained in the security features and will limit loss of data for forensic analysis and limits accidental changes to the web server. Without isolating privileged users from nonprivileged users when administering to the web server, organizations run the risk of having limited access to forensic data, as well as increased risk of accidental changes, by nonprivileged and presumably less-trained individuals. Satisfies: SRG-APP-000340-WSR-000029, SRG-APP-000211-WSR-000031</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a system administrator, for each Automation Controller NGINX web server host, inspect the current permissions and owner of Tower's web server configuration directory: stat -c "%a %U %G" /etc/nginx | grep -q "755 root root" || echo "FAILED" stat -c "%a %U %G" /etc/nginx/conf.d | grep -q "755 root root" || echo "FAILED" stat -c "%a %U %G" /etc/nginx/nginx.conf | grep -q "644 root root" || echo "FAILED" If "FAILED" is displayed, this is a finding. Inspect the current permissions and owner of Automation Controller web server program configuration files: stat -c "%a %U %G" /usr/lib/systemd/system/nginx.service | grep -q "644 root root" || echo "FAILED" If "FAILED" is displayed, this is a finding. Inspect the current permissions and owner of Automation Controller application content directory: stat -c "%a %U %G" /var/lib/awx/public/static | grep -q "755 root awx" || echo "FAILED" If "FAILED" is displayed, this is a finding. Inspect the current permissions and owner of Automation Controller web server log directory: stat -c "%a %U %G" /var/log/nginx| grep -q "770 nginx root" || echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000380-WSR-000072
+
+**Group ID:** `V-256961`
+
+### Rule: The Automation Controller NGINX web server application, libraries, and configuration files must only be accessible to privileged users.
+
+**Rule ID:** `SV-256961r955579_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Automation Controller NGINX web servers can be modified through parameter modification, patch installation, upgrades to the web server or modules, and security parameter changes. With each of these changes, there is the potential for an adverse effect such as a DoS, web server instability, or hosted application instability. To limit changes to Automation Controller NGINX web servers and limit exposure to any adverse effects from the changes, files such as the web server application files, libraries, and configuration files must have permissions and ownership set properly to only allow privileged users access.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, check that the file permissions for the web server components require privileged access: $ [ `find /etc/nginx -type f -not -perm 644 | wc -l` -gt 0 ] && echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000435-WSR-000147
+
+**Group ID:** `V-256962`
+
+### Rule: The Automation Controller NGINX web server must be protected from being stopped by a nonprivileged user.
+
+**Rule ID:** `SV-256962r955685_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>An attacker has at least two reasons to stop an Automation Controller NGINX web server. The first is to cause a DoS, and the second is to put in place changes the attacker made to an Automation Controller NGINX web server configuration. To prohibit an attacker from stopping the Automation Controller NGINX web server, the process ID (PID) of the web server and the utilities used to start/stop the web server must be protected from access by nonprivileged users. By knowing the PID and having access to the Automation Controller NGINX web server utilities, a nonprivileged user has a greater capability of stopping the server, whether intentionally or unintentionally.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, verify required service definition is protected from unprivileged users: stat -c "%a %U %G" /usr/lib/systemd/system/automation-controller.service | grep -q "644 root root" || echo "FAILED" stat -c "%a %U %G" /usr/lib/systemd/system/supervisord.service | grep -q "644 root root" || echo "FAILED" stat -c "%a %U %G" /usr/lib/systemd/system/nginx.service | grep -q "644 root root" || echo "FAILED" If "FAILED" is displayed, this is a finding. Verify the required services are enabled: systemctl is-enabled automation-controller.service >/dev/null || echo FAILED systemctl is-enabled supervisord.service >/dev/null || echo FAILED systemctl is-enabled nginx.service >/dev/null || echo FAILED If "FAILED" is displayed, this is a finding. Verify application services are correctly managed by supervisord. Verify protection of and capture supervisord configuration. stat -c "%a %U %G" /etc/supervisord.d/*.ini | grep -q "644 root root" || echo "FAILED" cat /etc/supervisord.d/*.ini | sed -n -E "/^\[.*\]/{s/\[(.*)\]/\1/;h;n;};/^[a-zA-Z]/{s/#.*//;G;s/([^ ]*) *= *(.*)\n(.*)/\3_\1='\2'/;p;}" > /tmp/supervisord.parsed.conf Verify specific start and restart properties for application services: application_services=(program:awx-dispatcher_autostart program:awx-dispatcher_autorestart program:awx-wsbroadcast_autostart program:awx-wsbroadcast_autorestart program:awx-uwsgi_autostart program:awx-uwsgi_autorestart program:awx-daphne_autostart program:awx-daphne_autorestart program:awx-rsyslogd_autostart program:awx-rsyslogd_autorestart) for SUPERVISOR_CHECK in ${application_services[@]}; do grep $SUPERVISOR_CHECK /tmp/supervisord.parsed.conf | grep -q true || echo "FAILED" ; done rm /tmp/supervisord.parsed.conf If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000439-WSR-000151
+
+**Group ID:** `V-256963`
+
+### Rule: The Automation Controller NGINX web server must employ cryptographic mechanisms (TLS/DTLS/SSL) to prevent the unauthorized disclosure of information during transmission.
+
+**Rule ID:** `SV-256963r956029_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Preventing the disclosure of transmitted information requires that the Automation Controller web server take measures to employ some form of cryptographic mechanism in order to protect the information during transmission. This is usually achieved through the use of Transport Layer Security (TLS). Transmission of data can take place between the web server and a large number of devices/applications external to the web server. Examples are a web client used by a user, a backend database, an audit server, or other web servers in a web cluster. If data is transmitted unencrypted, the data then becomes vulnerable to disclosure. The disclosure may reveal user identifier/password combinations, website code revealing business logic, or other user personal information. Satisfies: SRG-APP-000439-WSR-000151, SRG-APP-000439-WSR-000152, SRG-APP-000442-WSR-000182, SRG-APP-000429-WSR-000113</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, enumerate all available server connections: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` ; grep '\s*listen' NGINXCONF | grep -v ssl Ensure each available server connection that does not use SSL upgrades this connection to use SSL via an allowed method: - is redirected to an SSL server connection, e.g., "return 301 https://$host:443$request_uri"; - is rewritten to an SSL server URL, e.g., "rewrite ^ https://$host$request_uri? permanent;"; - is dropped silently; - or used other organizationally approved connection handling. Examine the NGINX configuration, for example: vi $NGINXCONF If any available server connection is not handled or upgraded to SSL via an organizationally approved method, this is a finding.
+
+## Group: SRG-APP-000439-WSR-000156
+
+**Group ID:** `V-256964`
+
+### Rule: Automation Controller NGINX web servers must maintain the confidentiality of controlled information during transmission through the use of an approved TLS version.
+
+**Rule ID:** `SV-256964r955693_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Transport Layer Security (TLS) is a required transmission protocol for a web server hosting controlled information. The use of TLS provides confidentiality of data in transit between the web server and client. FIPS 140-2 approved TLS versions must be enabled and non-FIPS-approved SSL versions must be disabled. NIST SP 800-52 defines the approved TLS versions for government applications.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator, for each Automation Controller NGINX web server, a TLS Configuration Check validates the TLS version used by the server: NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` sudo grep ssl_protocols ${NGINXCONF} | grep -E 'ssl_protocols\s+TLSv1.2;' || echo "FAILED" If "FAILED" is displayed, this is a finding.
+
+## Group: SRG-APP-000441-WSR-000181
+
+**Group ID:** `V-256965`
+
+### Rule: The Automation Controller NGINX web servers must maintain the confidentiality and integrity of information during preparation for transmission.
+
+**Rule ID:** `SV-256965r955697_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Information can be either unintentionally or maliciously disclosed or modified during preparation for transmission, including, for example, during aggregation, at protocol transformation points, and during packing/unpacking. These unauthorized disclosures or modifications compromise the confidentiality or integrity of the information. An example of this would be an SMTP queue. This queue may be added to a web server through an SMTP module to enhance error reporting or to allow developers to add SMTP functionality to their applications. Any modules used by the web server that queue data before transmission must maintain the confidentiality and integrity of the information before the data is transmitted.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, verify the NGINX web server configuration file in use is located at "/etc/nginx.nginx.conf": NGINXCONF=`nginx -V 2>&1 | tr ' ' '\n' | sed -ne '/conf-path/{s/.*conf-path=\(.*\)/\1/;p}' ` If the file does not exist, this is a finding. Verify the use of only dynamic modules witch are allowed by organizational policy: allowed_modules=(ssl_module http_v2_module http_realip_module http_addition_module http_xslt_module=dynamic http_image_filter_module=dynamic http_sub_module http_dav_module http_mp4_module http_gunzip_module http_gzip_static_module http_random_index_module http_secure_link_module http_degradation_module http_slice_module http_stub_status_module http_perl_module=dynamic http_auth_request_module mail_ssl_module stream_ssl_preread_module http_flv_module) ; echo "${allowed_modules[*]}" | tr ' ' '\n' >/tmp/allowed_modules ; nginx -V 2>&1 | grep module | tr ' ' '\n' | grep module | grep -v modules-path | grep -v -Ff /tmp/allowed_modules && echo "FAILED"; Verify the use of only runtime modules which are allowed by organizational policy: grep load_module $NGINXCONF | sed -n 's/^\s*load_module\s*\(.*\)/\1/p' | grep -v -Ff /tmp/allowed_modules && echo "FAILED" ; rm -f /tmp/allowed_modules If the output shows "FAILED", this is a finding.
+
+## Group: SRG-APP-000456-WSR-000187
+
+**Group ID:** `V-256966`
+
+### Rule: Automation Controller NGINX web servers must install security-relevant software updates within the configured time period directed by an authoritative source (e.g., IAVM, CTOs, DTMs, and STIGs).
+
+**Rule ID:** `SV-256966r955727_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Security flaws with software applications are discovered daily. Red Hat constantly updates and patches Automation Controller to address newly discovered security vulnerabilities. Organizations (including any contractor to the organization) are required to promptly install security-relevant software updates (e.g., patches, service packs, and hot fixes). Flaws discovered during security assessments, continuous monitoring, incident response activities, or information system error handling must also be addressed expeditiously. The Automation Controller NGINX web server will be configured to check for and install security-relevant software updates from an authoritative source within an organizationally identified time period from the availability of the update. By default, this time period will be every 24 hours.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, verify the system is configured to receive updates from an organizationally defined source for authoritative system updates: yum -v repolist If each URL is not valid and consistent with organizationally defined requirements, this is a finding. If each repository is not enabled in accordance with organizationally defined requirements, this is a finding. If the system is not configured to automatically receive and apply system updates from this source at least every 30 days, or manually receive and apply updates at least every 30 days, this is a finding.
+
+## Group: SRG-APP-000516-WSR-000079
+
+**Group ID:** `V-256967`
+
+### Rule: All accounts installed with the Automation Controller NGINX web server's software and tools must have passwords assigned and default passwords changed.
+
+**Rule ID:** `SV-256967r955845_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>During installation of the Automation Controller NGINX web server software, accounts are created for the web server to operate properly. The accounts installed can have either no password installed or a default password, which will be known and documented by the vendor and the user community. The first thing an attacker will try when presented with a login screen are the default user identifiers with default passwords. Installed applications may also install accounts with no password, making the login even easier. Once the Automation Controller NGINX web server is installed, the passwords for any created accounts must be changed and documented. The new passwords must meet the requirements for all passwords (i.e., upper/lower characters, numbers, special characters, time until change, reuse policy, etc.). Service accounts or system accounts that have no login capability do not need to have passwords set or changed.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+As a System Administrator for each Automation Controller NGINX web server host, verify the NGINX account is configured to disallow interactive login" grep '^nginx.*\(/sbin/nologin$\|/bin/false$\)' /etc/passwd If "FAILED" is displayed, this is a finding.
+

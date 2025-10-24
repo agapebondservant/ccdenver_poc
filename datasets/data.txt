@@ -1,0 +1,339 @@
+# STIG Benchmark: Red Hat Enterprise Linux 9 Security Technical Implementation Guide
+
+---
+
+**Version:** 2
+
+**Description:**
+This Security Technical Implementation Guide is published as a tool to improve the security of Department of Defense (DOD) information systems. The requirements are derived from the National Institute of Standards and Technology (NIST) 800-53 and related documents. Comments or proposed revisions to this document should be sent via email to the following address: disa.stig_spt@mail.mil.
+
+
+## Group: SRG-OS-000396-GPOS-00176
+**Group ID:** `V-258236`
+### Rule: RHEL 9 cryptographic policy must not be overridden.
+
+**Rule ID:** `SV-258236r1101920_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Centralized cryptographic policies simplify applying secure ciphers across an operating system and the applications that run on that operating system. Use of weak or untested encryption algorithms undermines the purposes of using encryption to protect data. Satisfies: SRG-OS-000396-GPOS-00176, SRG-OS-000393-GPOS-00173, SRG-OS-000394-GPOS-00174</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that RHEL 9 cryptographic policies are not overridden. Verify that the configured policy matches the generated policy with the following command: $ sudo update-crypto-policies --check The configured policy matches the generated policy If the returned message does not match the above, but instead matches the following, this is a finding: The configured policy does NOT match the generated policy List all of the crypto backends configured on the system with the following command: $ ls -l /etc/crypto-policies/back-ends/ lrwxrwxrwx. 1 root root 40 Nov 13 16:29 bind.config -> /usr/share/crypto-policies/FIPS/bind.txt lrwxrwxrwx. 1 root root 42 Nov 13 16:29 gnutls.config -> /usr/share/crypto-policies/FIPS/gnutls.txt lrwxrwxrwx. 1 root root 40 Nov 13 16:29 java.config -> /usr/share/crypto-policies/FIPS/java.txt lrwxrwxrwx. 1 root root 46 Nov 13 16:29 javasystem.config -> /usr/share/crypto-policies/FIPS/javasystem.txt lrwxrwxrwx. 1 root root 40 Nov 13 16:29 krb5.config -> /usr/share/crypto-policies/FIPS/krb5.txt lrwxrwxrwx. 1 root root 45 Nov 13 16:29 libreswan.config -> /usr/share/crypto-policies/FIPS/libreswan.txt lrwxrwxrwx. 1 root root 42 Nov 13 16:29 libssh.config -> /usr/share/crypto-policies/FIPS/libssh.txt -rw-r--r--. 1 root root 398 Nov 13 16:29 nss.config lrwxrwxrwx. 1 root root 43 Nov 13 16:29 openssh.config -> /usr/share/crypto-policies/FIPS/openssh.txt lrwxrwxrwx. 1 root root 49 Nov 13 16:29 opensshserver.config -> /usr/share/crypto-policies/FIPS/opensshserver.txt lrwxrwxrwx. 1 root root 46 Nov 13 16:29 opensslcnf.config -> /usr/share/crypto-policies/FIPS/opensslcnf.txt lrwxrwxrwx. 1 root root 43 Nov 13 16:29 openssl.config -> /usr/share/crypto-policies/FIPS/openssl.txt lrwxrwxrwx. 1 root root 48 Nov 13 16:29 openssl_fips.config -> /usr/share/crypto-policies/FIPS/openssl_fips.txt If the paths do not point to the respective files under /usr/share/crypto-policies/FIPS path, this is a finding. Note: nss.config should not be symlinked. Note: If there is an operational need to use a subpolicy that causes the links to the crypto backends to break, this is a finding, and exceptions will need to be made by the authorizing official (AO) and documented with the information system security officer (ISSO).
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /usr/share/crypto-policies/FIPS
+
+
+## Group: SRG-OS-000033-GPOS-00014
+**Group ID:** `V-258230`
+### Rule: RHEL 9 must enable FIPS mode.
+
+**Rule ID:** `SV-258230r958408_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Use of weak or untested encryption algorithms undermines the purposes of utilizing encryption to protect data. The operating system must implement cryptographic modules adhering to the higher standards approved by the federal government since this provides assurance they have been tested and validated. This includes NIST FIPS-validated cryptography for the following: Provisioning digital signatures, generating cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. Satisfies: SRG-OS-000033-GPOS-00014, SRG-OS-000125-GPOS-00065, SRG-OS-000396-GPOS-00176, SRG-OS-000423-GPOS-00187, SRG-OS-000478-GPOS-00223</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that RHEL 9 is in FIPS mode with the following command: $ sudo fips-mode-setup --check FIPS mode is enabled. If FIPS mode is not enabled, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/crypto-policies/config
+
+
+## Group: SRG-OS-000480-GPOS-00227
+**Group ID:** `V-258094`
+### Rule: RHEL 9 must not allow blank or null passwords.
+
+**Rule ID:** `SV-258094r1045187_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>If an account has an empty password, anyone could log in and run commands with the privileges of that account. Accounts with empty passwords should never be used in operational environments.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that null passwords cannot be used with the following command: $ sudo grep -i nullok /etc/pam.d/system-auth /etc/pam.d/password-auth If output is produced, this is a finding. If the system administrator (SA) can demonstrate that the required configuration is contained in a PAM configuration file included or substacked from the system-auth file, this is not a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/pam.d
+
+
+## Group: SRG-OS-000445-GPOS-00199
+**Group ID:** `V-258078`
+### Rule: RHEL 9 must use a Linux Security Module configured to enforce limits on system services.
+
+**Rule ID:** `SV-258078r958944_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Without verification of the security functions, security functions may not operate correctly and the failure may go unnoticed. Security function is defined as the hardware, software, and/or firmware of the information system responsible for enforcing the system security policy and supporting the isolation of code and data on which the protection is based. Security functionality includes, but is not limited to, establishing system accounts, configuring access authorizations (i.e., permissions, privileges), setting events to be audited, and setting intrusion detection parameters. This requirement applies to operating systems performing security function verification/testing and/or systems and environments that require this functionality. Satisfies: SRG-OS-000445-GPOS-00199, SRG-OS-000134-GPOS-00068</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Ensure that RHEL 9 verifies correct operation of security functions through the use of SELinux with the following command: $ getenforce Enforcing If SELINUX is not set to "Enforcing", this is a finding. Verify that SELinux is configured to be enforcing at boot. grep "SELINUX=" /etc/selinux/config # SELINUX= can take one of these three values: # NOTE: In earlier Fedora kernel builds, SELINUX=disabled would also SELINUX=enforcing If SELINUX line is missing, commented out, or not set to "enforcing", this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/selinux/config
+
+
+## Group: SRG-OS-000480-GPOS-00227
+**Group ID:** `V-258059`
+### Rule: The root account must be the only account having unrestricted access to RHEL 9 system.
+
+**Rule ID:** `SV-258059r991589_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>An account has root authority if it has a user identifier (UID) of "0". Multiple accounts with a UID of "0" afford more opportunity for potential intruders to guess a password for a privileged account. Proper configuration of sudo is recommended to afford multiple system administrators access to root privileges in an accountable manner.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that only the "root" account has a UID "0" assignment with the following command: $ awk -F: '$3 == 0 {print $1}' /etc/passwd root If any accounts other than "root" have a UID of "0", this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/passwd
+
+
+## Group: SRG-OS-000480-GPOS-00229
+**Group ID:** `V-258018`
+### Rule: RHEL 9 must not allow unattended or automatic logon via the graphical user interface.
+
+**Rule ID:** `SV-258018r1045090_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Failure to restrict system access to authenticated users negatively impacts operating system security.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: This requirement assumes the use of the RHEL 9 default graphical user interface, the GNOME desktop environment. If the system does not have any graphical user interface installed, this requirement is Not Applicable. Verify RHEL 9 does not allow an unattended or automatic logon to the system via a graphical user interface. Check for the value of the "AutomaticLoginEnable" in the "/etc/gdm/custom.conf" file with the following command: $ grep -i automaticlogin /etc/gdm/custom.conf AutomaticLoginEnable=false If the value of "AutomaticLoginEnable" is not set to "false", this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/gdm/custom.conf
+
+## Group: SRG-OS-000125-GPOS-00065
+**Group ID:** `V-257986`
+### Rule: RHEL 9 must enable the Pluggable Authentication Module (PAM) interface for SSHD.
+
+**Rule ID:** `SV-257986r1045030_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>When UsePAM is set to "yes", PAM runs through account and session types properly. This is important when restricted access to services based off of IP, time, or other factors of the account is needed. Additionally, this ensures users can inherit certain environment variables on login or disallow access to the server.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify the RHEL 9 SSHD is configured to allow for the UsePAM interface with the following command: $ sudo /usr/sbin/sshd -dd 2>&1 | awk '/filename/ {print $4}' | tr -d '\r' | tr '\n' ' ' | xargs sudo grep -iH '^\s*usepam' UsePAM yes If the "UsePAM" keyword is set to "no", is missing, or is commented out, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/ssh/sshd_config
+f ... .C... : /etc/ssh/sshd/ssh_config.d
+
+
+## Group: SRG-OS-000106-GPOS-00053
+**Group ID:** `V-257984`
+### Rule: RHEL 9 SSHD must not allow blank passwords.
+
+**Rule ID:** `SV-257984r1045026_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>If an account has an empty password, anyone could log on and run commands with the privileges of that account. Accounts with empty passwords should never be used in operational environments. Satisfies: SRG-OS-000106-GPOS-00053, SRG-OS-000480-GPOS-00229, SRG-OS-000480-GPOS-00227</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that RHEL 9 remote access using SSH prevents logging on with a blank password with the following command: $ sudo /usr/sbin/sshd -dd 2>&1 | awk '/filename/ {print $4}' | tr -d '\r' | tr '\n' ' ' | xargs sudo grep -iH '^\s*permitemptypasswords' PermitEmptyPasswords no If the "PermitEmptyPasswords" keyword is set to "yes", is missing, or is commented out, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/ssh/sshd_config
+f ... .C... : /etc/ssh/sshd/ssh_config.d
+
+
+## Group: SRG-OS-000405-GPOS-00184
+**Group ID:** `V-257879`
+### Rule: RHEL 9 local disk partitions must implement cryptographic mechanisms to prevent unauthorized disclosure or modification of all information that requires at rest protection.
+
+**Rule ID:** `SV-257879r1045454_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>RHEL 9 systems handling data requiring "data at rest" protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. Selection of a cryptographic mechanism is based on the need to protect the integrity of organizational information. The strength of the mechanism is commensurate with the security category and/or classification of the information. Organizations have the flexibility to either encrypt all information on storage devices (i.e., full disk encryption) or encrypt specific data structures (e.g., files, records, or fields). Satisfies: SRG-OS-000405-GPOS-00184, SRG-OS-000185-GPOS-00079, SRG-OS-000404-GPOS-00183</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: If there is a documented and approved reason for not having data-at-rest encryption at the operating system level, such as encryption provided by a hypervisor or a disk storage array in a virtualized environment, this requirement is Not Applicable. Verify RHEL 9 prevents unauthorized disclosure or modification of all information requiring at-rest protection by using disk encryption. Note: If there is a documented and approved reason for not having data-at-rest encryption, this requirement is Not Applicable. List all block devices in tree-like format: $ sudo lsblk --tree NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS zram0 252:0 0 8G 0 disk [SWAP] nvme0n1 259:0 0 476.9G 0 disk |-nvme0n1p1 259:1 0 1G 0 part /boot/efi |-nvme0n1p2 259:2 0 1G 0 part /boot |-nvme0n1p3 259:3 0 474.9G 0 part |-luks-<encrypted_id> 253:0 0 474.9G 0 crypt |-rhel-root 253:1 0 16G 0 lvm / |-rhel-varcache 253:2 0 8G 0 lvm /var/cache |-rhel-vartmp 253:3 0 4G 0 lvm /var/tmp |-rhel-varlog 253:4 0 4G 0 lvm /var/log |-rhel-home 253:5 0 64G 0 lvm /home |-rhel-varlogaudit 253:6 0 4G 0 lvm /var/log/audit Verify that the block device tree for each persistent filesystem, excluding the /boot and /boot/efi filesystems, has at least one parent block device of type "crypt", and that the encryption type is LUKS: $ sudo cryptsetup status luks-b74f6910-2547-4399-86b2-8b0252d926d7 /dev/mapper/luks-b74f6910-2547-4399-86b2-8b0252d926d7 is active and is in use. type: LUKS2 cipher: aes-xts-plain64 keysize: 512 bits key location: keyring device: /dev/nvme0n1p3 sector size: 512 offset: 32768 sectors size: 995986063 sectors mode: read/write If there are persistent filesystems (other than /boot or /boot/efi) whose block device trees do not have a crypt block device of type LUKS, ask the administrator to indicate how persistent filesystems are encrypted. If there is no evidence that persistent filesystems are encrypted, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /dev
+
+---------------------------------------------------
+Added entries:
+---------------------------------------------------
+f++++++++++++++++: /dev
+
+
+## Group: SRG-OS-000480-GPOS-00227
+**Group ID:** `V-257835`
+### Rule: RHEL 9 must not have a Trivial File Transfer Protocol (TFTP) server package installed.
+
+**Rule ID:** `SV-257835r1102037_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Removing the "tftp-server" package decreases the risk of the accidental (or intentional) activation of tftp services. If TFTP is required for operational support (such as transmission of router configurations), its use must be documented with the information systems security manager (ISSM), restricted to only authorized personnel, and have access control rules established.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that RHEL 9 does not have a "tftp-server" package installed with the following command: $ sudo dnf list --installed tftp-server Error: No matching Packages to list If the "tftp-server" package is installed, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Added entries:
+---------------------------------------------------
+f++++++++++++++++: /etc/systemd/system/tftp-server.service
+
+
+## Group: SRG-OS-000074-GPOS-00042
+**Group ID:** `V-257826`
+### Rule: RHEL 9 must not have a File Transfer Protocol (FTP) server package installed.
+
+**Rule ID:** `SV-257826r1106299_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>The FTP service provides an unencrypted remote access that does not provide for the confidentiality and integrity of user passwords or the remote session. If a privileged user were to log on using this service, the privileged user password could be compromised. SSH or other encrypted file transfer methods must be used in place of this service. Removing the "vsftpd" package decreases the risk of accidental activation. If FTP is required for operational support (such as transmission of router configurations), its use must be documented with the information systems security manager (ISSM), restricted to only authorized personnel, and have access control rules established. Satisfies: SRG-OS-000074-GPOS-00042, SRG-OS-000095-GPOS-00049, SRG-OS-000480-GPOS-00227</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify RHEL 9 does not have an FTP server package installed with the following command: $ sudo dnf list --installed vsftpd Error: No matching Packages to list If the "ftp" package is installed, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Added entries:
+---------------------------------------------------
+f++++++++++++++++: /etc/vsftpd/vsftpd.conf
+
+
+## Group: SRG-OS-000366-GPOS-00153
+**Group ID:** `V-257822`
+### Rule: RHEL 9 must have GPG signature verification enabled for all software repositories.
+
+**Rule ID:** `SV-257822r1044880_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Changes to any software components can have significant effects on the overall security of the operating system. This requirement ensures the software has not been tampered with and that it has been provided by a trusted vendor. All software packages must be signed with a cryptographic key recognized and approved by the organization. Verifying the authenticity of software prior to installation validates the integrity of the software package received from a vendor. This verifies the software has not been tampered with and that it has been provided by a trusted vendor.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify that all software repositories defined in "/etc/yum.repos.d/" have been configured with "gpgcheck" enabled: $ grep -w gpgcheck /etc/yum.repos.d/*.repo | more gpgcheck = 1 If "gpgcheck" is not set to "1" for all returned lines, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/yum.repos.d
+
+---------------------------------------------------
+Added entries:
+---------------------------------------------------
+f++++++++++++++++: /etc/yum.repos.d
+
+
+## Group: SRG-OS-000080-GPOS-00048
+**Group ID:** `V-257789`
+### Rule: RHEL 9 must require a unique superusers name upon booting into single-user and maintenance modes.
+
+**Rule ID:** `SV-257789r1117265_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>Having a nondefault grub superuser username makes password-guessing attacks less effective.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify the boot loader superuser account has been set with the following command: $ sudo grep -A1 "superusers" /etc/grub2.cfg set superusers="<accountname>" export superusers password_pbkdf2 <accountname> ${GRUB2_PASSWORD} Verify <accountname> is not a common name such as root, admin, or administrator. If superusers contains easily guessable usernames, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/grub2.cfg
+
+
+## Group: SRG-OS-000250-GPOS-00093
+**Group ID:** `V-270178`
+### Rule: The RHEL 9 SSH client must be configured to use only DOD-approved Message Authentication Codes (MACs) employing FIPS 140-3 validated cryptographic hash algorithms to protect the confidentiality of SSH client connections.
+
+**Rule ID:** `SV-270178r1051243_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>Without cryptographic integrity protections, information can be altered by unauthorized users without detection. Remote access (e.g., RDP) is access to DOD nonpublic information systems by an authorized user (or an information system) communicating through an external, nonorganization-controlled network. Remote access methods include, for example, dial-up, broadband, and wireless. Cryptographic mechanisms used for protecting the integrity of information include, for example, signed hash functions using asymmetric cryptography, enabling distribution of the public key to verify the hash information while maintaining the confidentiality of the secret key used to generate the hash. RHEL 9 incorporates systemwide crypto policies by default. The SSH configuration file has no effect on the ciphers, MACs, or algorithms unless specifically defined in the /etc/sysconfig/sshd file. The employed algorithms can be viewed in the /etc/crypto-policies/back-ends/openssh.config file.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify the SSH client is configured to use only MACs employing FIPS 140-3 approved algorithms. To verify the MACs in the systemwide SSH configuration file, use the following command: $ grep -i MACs /etc/crypto-policies/back-ends/openssh.config MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512 If the MACs entries in the "openssh.config" file have any hashes other than "hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512", or they are missing or commented out, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/crypto-policies
+
+
+## Group: SRG-OS-000080-GPOS-00048
+**Group ID:** `V-270176`
+### Rule: RHEL 9 "/etc/audit/" must be group-owned by root.
+
+**Rule ID:** `SV-270176r1117265_rule`
+**Severity:** medium
+
+**Description:**
+<VulnDiscussion>The "/etc/audit/" directory contains files that ensure the proper auditing of command execution, privilege escalation, file manipulation, and more. Protection of this directory is critical for system security.</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Verify the group ownership of the "/etc/audit/" directory with the following command: $ sudo stat -c "%G %n" /etc/audit/ root /etc/audit/ If "/etc/audit/" does not have a group owner of "root", this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /etc/audit
+
+
+## Group: SRG-OS-000405-GPOS-00184
+**Group ID:** `V-257879`
+### Rule: RHEL 9 local disk partitions must implement cryptographic mechanisms to prevent unauthorized disclosure or modification of all information that requires at rest protection.
+
+**Rule ID:** `SV-257879r1045454_rule`
+**Severity:** high
+
+**Description:**
+<VulnDiscussion>RHEL 9 systems handling data requiring "data at rest" protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. Selection of a cryptographic mechanism is based on the need to protect the integrity of organizational information. The strength of the mechanism is commensurate with the security category and/or classification of the information. Organizations have the flexibility to either encrypt all information on storage devices (i.e., full disk encryption) or encrypt specific data structures (e.g., files, records, or fields). Satisfies: SRG-OS-000405-GPOS-00184, SRG-OS-000185-GPOS-00079, SRG-OS-000404-GPOS-00183</VulnDiscussion><FalsePositives></FalsePositives><FalseNegatives></FalseNegatives><Documentable>false</Documentable><Mitigations></Mitigations><SeverityOverrideGuidance></SeverityOverrideGuidance><PotentialImpacts></PotentialImpacts><ThirdPartyTools></ThirdPartyTools><MitigationControl></MitigationControl><Responsibility></Responsibility><IAControls></IAControls>
+
+**Check Text:**
+Note: If there is a documented and approved reason for not having data-at-rest encryption at the operating system level, such as encryption provided by a hypervisor or a disk storage array in a virtualized environment, this requirement is Not Applicable. Verify RHEL 9 prevents unauthorized disclosure or modification of all information requiring at-rest protection by using disk encryption. Note: If there is a documented and approved reason for not having data-at-rest encryption, this requirement is Not Applicable. List all block devices in tree-like format: $ sudo lsblk --tree NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS zram0 252:0 0 8G 0 disk [SWAP] nvme0n1 259:0 0 476.9G 0 disk |-nvme0n1p1 259:1 0 1G 0 part /boot/efi |-nvme0n1p2 259:2 0 1G 0 part /boot |-nvme0n1p3 259:3 0 474.9G 0 part |-luks-<encrypted_id> 253:0 0 474.9G 0 crypt |-rhel-root 253:1 0 16G 0 lvm / |-rhel-varcache 253:2 0 8G 0 lvm /var/cache |-rhel-vartmp 253:3 0 4G 0 lvm /var/tmp |-rhel-varlog 253:4 0 4G 0 lvm /var/log |-rhel-home 253:5 0 64G 0 lvm /home |-rhel-varlogaudit 253:6 0 4G 0 lvm /var/log/audit Verify that the block device tree for each persistent filesystem, excluding the /boot and /boot/efi filesystems, has at least one parent block device of type "crypt", and that the encryption type is LUKS: $ sudo cryptsetup status luks-b74f6910-2547-4399-86b2-8b0252d926d7 /dev/mapper/luks-b74f6910-2547-4399-86b2-8b0252d926d7 is active and is in use. type: LUKS2 cipher: aes-xts-plain64 keysize: 512 bits key location: keyring device: /dev/nvme0n1p3 sector size: 512 offset: 32768 sectors size: 995986063 sectors mode: read/write If there are persistent filesystems (other than /boot or /boot/efi) whose block device trees do not have a crypt block device of type LUKS, ask the administrator to indicate how persistent filesystems are encrypted. If there is no evidence that persistent filesystems are encrypted, this is a finding.
+
+**Log Text:**
+---------------------------------------------------
+Changed entries:
+---------------------------------------------------
+f ... .C... : /dev
