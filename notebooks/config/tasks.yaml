@@ -1,6 +1,6 @@
 quality_assurance_specialist:
   description: >
-    Here is a driver's license image:
+    Here is the path to a driver's license image:
     {image}
     
     Your task is to analyze this image and validate whether it is an authentic Colorado driver's license.
