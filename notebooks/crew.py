@@ -32,9 +32,11 @@ main_llm = LLM(
 
 class DriversLicenseField(BaseModel):
     
-    field: str = Field(description="Name of field", default="")
+    field: str = Field("", description="Name of field")
     
-    error_reason: str = Field(description="Reason for invalid or missing field", default="")
+    error_reason: str = Field("", description="Reason for invalid or missing field")
+
+    is_valid: Optional[bool] = Field(None, description="Indicates whether the entity is currently active.")
 
 class DriversLicenseMetadata(BaseModel):
     

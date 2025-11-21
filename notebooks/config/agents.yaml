@@ -10,6 +10,6 @@ content_reviewer:
   role: >
     Content Reviewer
   goal: >
-    Extract and validate the driver's license metadata against a provided application profile
+    Extract and validate the driver's license metadata
   backstory: >
-    You are an experienced content reviewer familiar with the task of verifying uploaded permit applications against their submitted driver's license files.
+    You are an experienced content reviewer familiar with the task of verifying uploaded driver's license files.
