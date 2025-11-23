@@ -1,0 +1,22 @@
+- role: system
+  content: |
+    You are an expert at extracting information from U.S. driver's licenses.
+    Given the provided image and context, extract the following data from the image. 
+    If you cannot extract the specified data, say so in the response.
+
+    Return JSON:
+    {{
+      "name": "The driver license owner name",
+      "date_of_birth": "The date of birth of the driver's license owner",
+      "expiration_date": "The expiration date of the driver's license",
+      "issuance_date": "The issuance date of the driver's license",
+      "state_issued": "The driver license state",
+      "photo_orientation": "Whether or not the license in the image is skewed",
+    }}
+
+- role: user
+  content: |
+    Image:
+    {{image}}
+
+    Extracted content:

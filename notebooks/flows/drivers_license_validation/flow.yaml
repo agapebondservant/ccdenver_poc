@@ -1,0 +1,71 @@
+metadata:
+  id: graph-rag-123
+  name: "Drivers License Validation"
+  description: "Extracts drivers license fields"
+  version: "1.0.0"
+  author: "Omotola Awofolu"
+
+  recommended_models:
+    default: "meta-llama/llama-4-scout"
+    compatible: ["google/gemma-3-27b-it", "google/gemma-3-12b-it", "google/gemma-3-4b-it"]
+    experimental: []
+
+  tags:
+    - "knowledge-extraction"
+    - "document-processing"
+    - "image-to-text"
+
+  license: "Apache-2.0"
+
+  dataset_requirements:
+    required_columns:
+      - model_name
+      - application_id
+      - application_data
+      - image_path
+    description: "Input dataset should contain application data with image paths."
+
+  output_columns:
+  - image_data
+
+blocks:
+
+  - block_type: PromptBuilderBlock
+    block_config:
+      block_name: extract_data_from_image_prompt
+      input_cols: image_path
+      output_cols: data_from_image_prompt
+      prompt_config_path: prompts/data_from_image.yaml
+      format_as_messages: true
+
+  - block_type: LLMChatBlock
+    block_config:
+      block_name: extract_data_from_image
+      input_cols: data_from_image_prompt
+      output_cols:
+        - image_data_full
+      max_tokens: 8192
+      async_mode: true
+      n: 1
+
+  - block_type: LLMParserBlock
+    block_config:
+      block_name: extract_json_data_from_output
+      input_cols: image_data_full
+      extract_content: true
+      extract_reasoning_content: true
+
+  - block_type: TextParserBlock
+    block_config:
+      block_name: extract_code_to_summary_text
+      input_cols: extract_json_data_from_output_content
+      output_cols: image_data
+      start_tags: [""]
+      end_tags: [""]
+
+  - block_type: RenameColumnsBlock
+    block_config:
+      block_name: rename_fields
+      input_cols:
+        extract_json_data_from_output_content: image_data_content
+        extract_json_data_from_output_reasoning_content: image_data_reasoning_content
