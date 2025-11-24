@@ -20,6 +20,12 @@ import pandas as pd
 
 import ast
 
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+
+import matplotlib.ticker as mtick
+
 def load_file_as_json(file_path):
     """
     Given a file, returns its content as JSON.
@@ -249,36 +255,74 @@ def data_report_prep(data: pd.DataFrame):
     """
     transformed_df = data.copy()
 
-    def ast_lteral_eval(obj): 
-        return ast.literal_eval(obj) if isinstance(obj, str) and obj.strip().startswith(('{', '[')) else None
+    def jsonize(obj): 
+        try:
+            return json.loads(obj)
+        except Exception as e:
+            return {}
 
-    transformed_df["extracted_data_dict"]= transformed_df["extracted_data"].apply(ast_lteral_eval)
+    transformed_df["extracted_data_dict"]= transformed_df["extracted_data"].apply(jsonize)
 
-    transformed_df["eval_data_dict"]= transformed_df["eval_data"].apply(ast_lteral_eval)
+    transformed_df["eval_data_dict"]= transformed_df["eval_data"].apply(jsonize)
 
     extracted_df = pd.json_normalize(transformed_df["extracted_data_dict"]).add_prefix("extracted_")
 
     eval_df = pd.json_normalize(transformed_df["eval_data_dict"]).add_prefix("eval_")
 
-    return pd.concat([transformed_df.drop(columns=["extracted_data", 
-                                                   "eval_data", 
-                                                   "extracted_data_dict",
-                                                   "eval_data_dict"]),
-              extracted_df,
-              eval_df],
-              axis=1)
+    transformed_df = transformed_df.drop(columns=["extracted_data", "eval_data", "extracted_data_dict", "eval_data_dict"])
+
+    return transformed_df.join(extracted_df).join(eval_df)
     
 
-def generate_visualizatioms(data: pd.DataFrame, target_dir: str):
+def generate_visualizatioms(reporting_df: pd.DataFrame, target_dir: str):
     """Generates visualizations from the given dataframe."""
-    pass
+    
+    groups = reporting_df['model_name'].unique()
+    
+    category_cols = [col for col in reporting_df.columns if col != "model_name"]
+    
+    fig, axes = plt.subplots(len(category_cols), len(groups), figsize=(12, 30), sharey=True)
+    
+    fig.suptitle('Accuracy by Model and Field')
+    
+    for i, group in enumerate(groups):
+    
+        for j, col in enumerate(category_cols):
+            
+            # Filter data for the current group
+            group_data = reporting_df[reporting_df['model_name'] == group]
+        
+            # Calculate value counts (frequencies) of the categorical variable
+            category_cols = [col for col in reporting_df.columns if col != "model_name"]
+                    
+            category_counts = (group_data[col].value_counts(normalize=True) * 100).sort_index()
+            
+            category_counts.plot.bar(ax=axes[j, i])
+            
+            axes[j, i].set_title(group.removeprefix("openrouter/"))
+            
+            axes[j, i].set_xlabel(col.removeprefix("eval_"))
+            
+            axes[j, i].set_ylabel('Percentage')
+            
+            axes[j, i].tick_params(axis='x', rotation=45)
+
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # Adjust layout to prevent title overlap
+    
+    plt.savefig(f"{target_dir}/barplot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png") 
+    
+    plt.show()
 
 def generate_csv_report(data: pd.DataFrame, target_dir: str):
     """Generates a CSV file from the given dataframe."""
+    
     os.makedirs(target_dir, exist_ok=True)
-    data.to_csv(f"{target_dir}/dataset_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl", orient='records', lines=True)
+    
+    data.to_csv(f"{target_dir}/dataset_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
 
 def generate_jsonl_report(data: pd.DataFrame, target_dir: str):
     """Generates a jsonl file from the given dataframe."""
+    
     os.makedirs(target_dir, exist_ok=True)
+    
     data.to_json(f"{target_dir}/dataset_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl", orient='records', lines=True)
