@@ -21,12 +21,11 @@ metadata:
     required_columns:
       - model_name
       - application_id
-      - application_data
       - image_path
     description: "Input dataset should contain application data with image paths."
 
   output_columns:
-  - image_data
+  - extracted_data
 
 blocks:
 
@@ -38,12 +37,11 @@ blocks:
       prompt_config_path: prompts/data_from_image.yaml
       format_as_messages: true
 
-  - block_type: LLMChatBlock
+  - block_type: CustomLLMMultimodalBlock
     block_config:
       block_name: extract_data_from_image
       input_cols: data_from_image_prompt
-      output_cols:
-        - image_data_full
+      output_cols: extracted_data_full
       max_tokens: 8192
       async_mode: true
       n: 1
@@ -51,7 +49,7 @@ blocks:
   - block_type: LLMParserBlock
     block_config:
       block_name: extract_json_data_from_output
-      input_cols: image_data_full
+      input_cols: extracted_data_full
       extract_content: true
       extract_reasoning_content: true
 
@@ -59,7 +57,7 @@ blocks:
     block_config:
       block_name: extract_code_to_summary_text
       input_cols: extract_json_data_from_output_content
-      output_cols: image_data
+      output_cols: extracted_data
       start_tags: [""]
       end_tags: [""]
 
@@ -67,5 +65,4 @@ blocks:
     block_config:
       block_name: rename_fields
       input_cols:
-        extract_json_data_from_output_content: image_data_content
-        extract_json_data_from_output_reasoning_content: image_data_reasoning_content
+        extract_json_data_from_output_content: extracted_data_output
