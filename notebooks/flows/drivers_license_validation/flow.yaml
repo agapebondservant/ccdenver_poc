@@ -55,7 +55,7 @@ blocks:
 
   - block_type: TextParserBlock
     block_config:
-      block_name: extract_code_to_summary_text
+      block_name: extract_json_data_from_output_text
       input_cols: extract_json_data_from_output_content
       output_cols: extracted_data
       start_tags: [""]
@@ -71,6 +71,7 @@ blocks:
     block_config:
       block_name: drop_fields
       input_cols:
+        - extracted_data_full
         - data_from_image_prompt
         - extracted_data_full
         - extracted_data_output

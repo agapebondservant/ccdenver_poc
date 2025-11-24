@@ -11,7 +11,8 @@
     3. **expiration_date**: "The expiration date of the driver's license",
     4. **issuance_date**: "The issuance date of the driver's license",
     5. "**state_issued**: "The driver license state",
-    6. **photo_orientation**: "Whether or not the license in the image is skewed"
+    6. "**dl_number**: "The driver license number",
+    7. **photo_orientation**: "Whether or not the license in the image is skewed"
 
 - role: user
   content: |

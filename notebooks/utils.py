@@ -202,3 +202,35 @@ def group_files_by_id(git_repo: str, subdir: str, branch="main"):
         print(f"Error grouping files from {git_repo}/{subdir}: {e}")
 
         traceback.print_exc()
+
+def convert_to_submitted_fields(applications: list, patterns_file_path: str) -> list:
+    """Uses static pattern matching rules to extract a list of dicts representing the submitted application fields."""
+
+    try:
+
+        # extract the static pattern matching rules
+        patterns = load_file_as_json(patterns_file_path)
+
+        submitted_data = []
+    
+        # extract the submitted application data
+        for application in applications:
+
+            application_data = application["application_data"]
+
+            _application_data = {"application_id": application["application_id"], 
+                                 "image_path": application["image_path"]}
+            
+            for key in patterns:
+
+                _application_data[key] = get_jsonpath_match(application_data, patterns[key])
+
+            submitted_data.append(_application_data)
+                
+        return submitted_data
+
+    except Exception as e:
+
+        print(f"Error extracting submitted data: {e}")
+
+        traceback.print_exc()
