@@ -18,5 +18,3 @@ peft==0.17.1
 trl==0.22.2
 dataframe_image==0.2.7
 pytesseract==0.3.13
-jsonpath_ng==1.7.0
-validators==0.35.0

@@ -1,0 +1,113 @@
+metadata:
+  id: graph-rag-123
+  name: "Drivers License Validation"
+  description: "Extracts drivers license fields"
+  version: "1.0.0"
+  author: "Omotola Awofolu"
+
+  recommended_models:
+    default: "meta-llama/llama-4-scout"
+    compatible: ["google/gemma-3-27b-it", "google/gemma-3-12b-it", "google/gemma-3-4b-it"]
+    experimental: []
+
+  tags:
+    - "knowledge-extraction"
+    - "document-processing"
+    - "image-to-text"
+
+  license: "Apache-2.0"
+
+  dataset_requirements:
+    required_columns:
+      - model_name
+      - application_id
+      - image_path
+    description: "Input dataset should contain application data with image paths."
+
+  output_columns:
+  - extracted_data
+
+blocks:
+
+  - block_type: PromptBuilderBlock
+    block_config:
+      block_name: extract_data_from_image_prompt
+      input_cols: image_path
+      output_cols: data_from_image_prompt
+      prompt_config_path: prompts/data_from_image.yaml
+      format_as_messages: true
+
+  - block_type: CustomLLMMultimodalBlock
+    block_config:
+      block_name: extract_data_from_image
+      input_cols: data_from_image_prompt
+      output_cols: extracted_data_full
+      max_tokens: 8192
+      async_mode: true
+      n: 1
+
+  - block_type: LLMParserBlock
+    block_config:
+      block_name: extract_json_data_from_output
+      input_cols: extracted_data_full
+      extract_content: true
+      extract_reasoning_content: true
+
+  - block_type: TextParserBlock
+    block_config:
+      block_name: extract_json_data_from_output_text
+      input_cols: extract_json_data_from_output_content
+      output_cols: extracted_data
+      start_tags: [""]
+      end_tags: [""]
+
+  - block_type: PromptBuilderBlock
+    block_config:
+      block_name: evaluate_data_from_image_prompt
+      input_cols:
+      - image_path
+      - application_id
+      - name
+      - date_of_birth
+      - expiration_date
+      - dl_number
+      - state_issued
+      - extracted_data
+      output_cols: eval_from_image_prompt
+      prompt_config_path: prompts/eval_from_image.yaml
+      format_as_messages: true
+
+  - block_type: LLMChatBlock
+    block_config:
+      block_name: eval_data_from_image
+      input_cols: eval_from_image_prompt
+      output_cols: extracted_eval_full
+      max_tokens: 8192
+      async_mode: true
+      n: 1
+
+  - block_type: LLMParserBlock
+    block_config:
+      block_name: eval_json_data_from_output
+      input_cols: extracted_eval_full
+      extract_content: true
+      extract_reasoning_content: true
+
+  - block_type: TextParserBlock
+    block_config:
+      block_name: eval_json_data_from_output_text
+      input_cols: eval_json_data_from_output_content
+      output_cols: eval_data
+      start_tags: [""]
+      end_tags: [""]
+
+  - block_type: CustomDeleteColumnsBlock
+    block_config:
+      block_name: drop_fields
+      input_cols:
+        - extracted_data_full
+        - data_from_image_prompt
+        - extract_json_data_from_output_content
+        - extracted_eval_full
+        - eval_from_image_prompt
+        - eval_json_data_from_output_content
