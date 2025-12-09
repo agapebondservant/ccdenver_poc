@@ -1,0 +1,10 @@
+content_extractor:
+  description: >
+    Extract all the data that you can get from this image: {image}
+    
+  expected_output: >
+    A clean outline of all the data that you can extract from the image.
+  agent: content_extractor
+  allow_delegation: False
+  markdown: True
+  output_file: extracted.txt

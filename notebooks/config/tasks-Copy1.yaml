@@ -1,0 +1,32 @@
+content_extractor:
+  description: >
+    Here is the path to a driver's license image:
+    {image}
+    
+    Your task is to extract the following data from the image. If you cannot extract the requested data from the image, say that the data was missing or unclear.
+
+    1. **licenseOwner**:
+        **value**: The name of the driver's license owner.
+        **errorReason**: Explanation of invalid name, if applicable. If the owner of the driver's license is valid, leave this blank.
+    2. **dob**: 
+       **value**: The date of birth of the driver's license owner.
+       **errorReason**: Explanation of invalid date of birth, if applicable. If the date of birth of the driver's license owner is valid, leave this blank.
+    3. **expirationDate**: 
+        **value**: The expiration date of the driver's license.
+        **errorReason**: Explanation of invalid expiration date, if applicable. If the expiration date of the driver's license is valid, leave this blank.
+    4. **state**: 
+        **value**: US state that issued the license.
+        **errorReason**: Explanation of invalid US state, if applicable. If the US state that issued the license is shown, leave this blank.
+    5. **licenseNumber**: 
+        **value**: The license number.
+        **errorReason**: Explanation of invalid license number, if applicable. If the license number is valid, leave blank.
+    6. **photoOrientation**:
+        **value**: Whether or not the orientation of the license is upright in the photo.
+        **errorReason**: Further explanation if the license does not look upright in the photo. If the license looks upright, leave this blank.
+    
+  expected_output: >
+    DriversLicenseMetadata
+  agent: content_extractor
+  allow_delegation: False
+  markdown: False
+  output_file: extracted.txt

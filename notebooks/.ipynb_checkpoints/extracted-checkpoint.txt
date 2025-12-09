@@ -1,0 +1,26 @@
+{
+  "licenseOwner": {
+    "value": "John Doe",
+    "errorReason": ""
+  },
+  "dob": {
+    "value": "12/31/1980",
+    "errorReason": ""
+  },
+  "expirationDate": {
+    "value": "03/20/2025",
+    "errorReason": ""
+  },
+  "state": {
+    "value": "Colorado",
+    "errorReason": ""
+  },
+  "licenseNumber": {
+    "value": "DENVER-25CAP-00000-04SUF",
+    "errorReason": ""
+  },
+  "photoOrientation": {
+    "value": true,
+    "errorReason": ""
+  }
+}

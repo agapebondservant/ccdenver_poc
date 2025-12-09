@@ -16,3 +16,6 @@ temp/
 HelloWorld.cfc
 HelloWorldTest.cfc
 datasets/Linux-APT-Dataset-2024/
+old/
+test.json
+wb-secret.yaml
